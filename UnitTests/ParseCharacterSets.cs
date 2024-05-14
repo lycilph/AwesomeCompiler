@@ -24,9 +24,11 @@ public class ParseCharacterSets
         var pattern = @"[^0-9]";
         var regex = new Regex(pattern);
 
-        // Check that character set is correct
+        // Create tree manually here
+        var seq = new SequenceNode();
 
-        Assert.True(false);
+        // Compare trees
+        Assert.Equal(regex.GetRoot(), seq);
     }
 
     [Fact]
@@ -35,9 +37,11 @@ public class ParseCharacterSets
         var pattern = @"[abc]";
         var regex = new Regex(pattern);
 
-        // Check that character set is correct
+        // Create tree manually here
+        var seq = new SequenceNode();
 
-        Assert.True(false);
+        // Compare trees
+        Assert.Equal(regex.GetRoot(), seq);
     }
 
     [Fact]
@@ -46,9 +50,11 @@ public class ParseCharacterSets
         var pattern = @"[a-zA-Z_]";
         var regex = new Regex(pattern);
 
-        // Check that character set is correct
+        // Create tree manually here
+        var seq = new SequenceNode();
 
-        Assert.True(false);
+        // Compare trees
+        Assert.Equal(regex.GetRoot(), seq);
     }
 
     [Fact]
@@ -57,8 +63,10 @@ public class ParseCharacterSets
         var pattern = @"[a-zA-Z_1234-9]";
         var regex = new Regex(pattern);
 
-        // Check that character set is correct
+        // Create tree manually here
+        var seq = new SequenceNode();
 
-        Assert.True(false);
+        // Compare trees
+        Assert.Equal(regex.GetRoot(), seq);
     }
 }

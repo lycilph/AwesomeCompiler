@@ -57,7 +57,7 @@ public class RegexParser
     {
         Node? node = null;
 
-        char c = _pattern[current];
+        var c = _pattern[current];
         switch (c)
         {
             case '[':
@@ -65,7 +65,7 @@ public class RegexParser
                 if (end == -1)
                     Debug.WriteLine("Unmatched ] found");
 
-                node = new CharacterSetNode(_pattern.Substring(current+1, end-current-1));
+                node = ParseCharacterSet(_pattern.Substring(current + 1, end - current - 1));
                 current = end + 1;
                 break;
             case '(':
@@ -100,6 +100,41 @@ public class RegexParser
                 node = new MatchSingleCharacterNode(c);
                 current++;
                 break;
+        }
+
+        return node;
+    }
+
+    private CharacterSetNode ParseCharacterSet(string setPattern)
+    {
+        var node = new CharacterSetNode();
+        var setCurrent = 0;
+
+        if (setPattern[setCurrent] == '^')
+        {
+            node.IsNegativeSet = true;
+            setCurrent++;
+        }
+
+        char c = ' ';
+        char c2 = ' ';
+        while (setCurrent < setPattern.Length) 
+        {
+            c = setPattern[setCurrent];
+
+            // Are we parsing a range
+            if (setCurrent < setPattern.Length-1 && setPattern[setCurrent+1] == '-')
+            { 
+                c2 = setPattern[setCurrent+2];
+                node.AddRange(c, c2);
+                setCurrent += 3;
+            }
+            // Or is this just a single character
+            else 
+            {
+                node.AddCharacter(c);
+                setCurrent++;
+            }
         }
 
         return node;

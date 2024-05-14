@@ -6,18 +6,32 @@ namespace Core.RegularExpressions;
 [DebuggerDisplay("Character set node [{_pattern, nq}]")]
 public class CharacterSetNode : Node
 {
-    private readonly string _pattern;
+    private HashSet<char> _chars = [];
+    public bool IsNegativeSet { get; set; }
 
-    public CharacterSetNode(string pattern)
+    public CharacterSetNode() {}
+    public CharacterSetNode(char start, char end, bool isNegativeSet = false)
     {
-        _pattern = pattern;
+        IsNegativeSet = isNegativeSet;
+        AddRange(start, end);
     }
+    public CharacterSetNode(string range, bool isNegativeSet = false)
+    {
+        IsNegativeSet = isNegativeSet;
+        var parts = range.Split('-');
+        AddRange(parts[0][0], parts[2][0]);
+    }
+
+    public void AddRange(char start, char end)
+    {
+        for (char c = start; c <= end; c++)
+            AddCharacter(c);
+    }
+
+    public void AddCharacter(char c) => _chars.Add(c);
 
     public override bool Equals(Node? other)
     {
-        if (other != null && other is CharacterSetNode set) 
-            return _pattern.Equals(set._pattern);
-        else
-            return false;
+        throw new NotImplementedException();
     }
 }
