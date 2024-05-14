@@ -78,7 +78,7 @@ public class RegularExpressionParsing
         {
             Left = new MatchSingleCharacterNode('c'),
             Right = new MatchSingleCharacterNode('d')
-        }); ;
+        });
 
         // Compare trees
         Assert.Equal(regex.GetRoot(), seq);

@@ -3,7 +3,7 @@
 namespace Core.RegularExpressions;
 
 // nq = no qoutes around the string _pattern
-[DebuggerDisplay("Character set node [{_pattern, nq}]")]
+[DebuggerDisplay("Character set node [{_chars.Count} characters]")]
 public class CharacterSetNode : Node
 {
     private HashSet<char> _chars = [];
@@ -19,7 +19,7 @@ public class CharacterSetNode : Node
     {
         IsNegativeSet = isNegativeSet;
         var parts = range.Split('-');
-        AddRange(parts[0][0], parts[2][0]);
+        AddRange(parts[0][0], parts[1][0]);
     }
 
     public void AddRange(char start, char end)
@@ -32,6 +32,9 @@ public class CharacterSetNode : Node
 
     public override bool Equals(Node? other)
     {
-        throw new NotImplementedException();
+        if (other != null && other is CharacterSetNode set)
+            return _chars.SetEquals(set._chars) && IsNegativeSet == set.IsNegativeSet;
+        else
+            return false;
     }
 }
