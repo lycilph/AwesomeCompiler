@@ -13,5 +13,15 @@ public class Regex
         _root = parser.Parse();
     }
 
+    public bool IsMatch(string input)
+    {
+        return _root.IsMatch(input.ToList());
+    }
+
     public Node GetRoot() => _root;
+
+    public static bool IsMatch(string input, string pattern) 
+    {
+        return new Regex(input).IsMatch(pattern);
+    }
 }

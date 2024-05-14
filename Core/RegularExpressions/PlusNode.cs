@@ -12,6 +12,19 @@ public class PlusNode : Node
         Child = child;
     }
 
+    public override bool IsMatch(List<char> input)
+    {
+        var result = false;
+        while (true)
+        {
+            if (Child!.IsMatch(input))
+                result = true;
+            else
+                break;
+        }
+        return result;
+    }
+
     public override bool Equals(Node? other)
     {
         if (other != null && other is PlusNode plus)

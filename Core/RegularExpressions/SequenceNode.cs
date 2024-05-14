@@ -14,6 +14,14 @@ public class SequenceNode : Node
 
     public Node Last() => _children.Last();
 
+    public override bool IsMatch(List<char> input)
+    {
+        foreach (Node node in _children)
+            if (!node.IsMatch(input))
+                return false;
+        return true;
+    }
+
     public override bool Equals(Node? other)
     {
         if (other != null && other is SequenceNode seq) 

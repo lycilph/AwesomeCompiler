@@ -30,6 +30,16 @@ public class CharacterSetNode : Node
 
     public void AddCharacter(char c) => _chars.Add(c);
 
+    public override bool IsMatch(List<char> input)
+    {
+        if (input.Count > 0 && _chars.Contains(input.First()))
+        {
+            input.RemoveAt(0);
+            return true;
+        }
+        return false;
+    }
+
     public override bool Equals(Node? other)
     {
         if (other != null && other is CharacterSetNode set)

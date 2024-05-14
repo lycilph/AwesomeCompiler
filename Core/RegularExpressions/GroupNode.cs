@@ -12,6 +12,8 @@ public class GroupNode : Node
         _child = child;
     }
 
+    public override bool IsMatch(List<char> input) => _child.IsMatch(input);
+
     public override bool Equals(Node? other)
     {
         if (other != null && other is GroupNode group)

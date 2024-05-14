@@ -12,6 +12,16 @@ public class MatchSingleCharacterNode : Node
         _value = value;
     }
 
+    public override bool IsMatch(List<char> input)
+    {
+        if (input.Count > 0 && input.First() == _value) 
+        {
+            input.RemoveAt(0);
+            return true;
+        }
+        return false;
+    }
+
     public override bool Equals(Node? other)
     {
         if (other != null && other is MatchSingleCharacterNode sc)

@@ -12,6 +12,12 @@ public class OptionalNode : Node
         Child = child;
     }
 
+    public override bool IsMatch(List<char> input)
+    {
+        Child!.IsMatch(input);
+        return true;
+    }
+
     public override bool Equals(Node? other)
     {
         if (other != null && other is OptionalNode optional)

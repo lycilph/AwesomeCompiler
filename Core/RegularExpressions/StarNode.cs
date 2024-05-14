@@ -12,6 +12,16 @@ public class StarNode : Node
         Child = child;
     }
 
+    public override bool IsMatch(List<char> input)
+    {
+        while (true)
+        {
+            if (!Child!.IsMatch(input))
+                break;
+        }
+        return true;
+    }
+
     public override bool Equals(Node? other)
     {
         if (other != null && other is StarNode star)

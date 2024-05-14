@@ -2,7 +2,7 @@ using Core.RegularExpressions;
 
 namespace UnitTests;
 
-public class RegularExpressionParsing
+public class ParseComplexExpressions
 {
     [Fact]
     public void ParseComplexExpression1()

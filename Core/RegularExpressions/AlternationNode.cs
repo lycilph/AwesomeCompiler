@@ -8,6 +8,15 @@ public class AlternationNode : Node
     public Node? Left { get; set; }
     public Node? Right { get; set; }
 
+    public override bool IsMatch(List<char> input)
+    {
+        if (Left!.IsMatch(input))
+            return true;
+        if (Right!.IsMatch(input))
+            return true;
+        return false;
+    }
+
     public override bool Equals(Node? other)
     {
         if (other != null && other is AlternationNode alternation)
