@@ -1,10 +1,16 @@
-﻿using System.Diagnostics;
+﻿using Core.RegularExpressions.Algorithms;
+using System.Diagnostics;
 
 namespace Core.RegularExpressions;
 
 [DebuggerDisplay(". node")]
 public class MatchAnyCharacterNode : Node
 {
+    public override void Accept(IVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
+
     public override bool IsMatch(List<char> input)
     {
         if (input.Count > 0)

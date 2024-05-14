@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Core.RegularExpressions.Algorithms;
+using System.Diagnostics;
 
 namespace Core.RegularExpressions;
 
@@ -29,6 +30,13 @@ public class CharacterSetNode : Node
     }
 
     public void AddCharacter(char c) => _chars.Add(c);
+
+    public void AddSet(CharacterSetNode set) => _chars.UnionWith(set._chars);
+
+    public override void Accept(IVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
 
     public override bool IsMatch(List<char> input)
     {

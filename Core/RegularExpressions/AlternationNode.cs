@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Core.RegularExpressions.Algorithms;
+using System.Diagnostics;
 
 namespace Core.RegularExpressions;
 
@@ -7,6 +8,13 @@ public class AlternationNode : Node
 {
     public Node? Left { get; set; }
     public Node? Right { get; set; }
+
+    public override void Accept(IVisitor visitor)
+    {
+        Left!.Accept(visitor);
+        Right!.Accept(visitor);
+        visitor.Visit(this);
+    }
 
     public override bool IsMatch(List<char> input)
     {

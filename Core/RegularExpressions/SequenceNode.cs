@@ -1,4 +1,6 @@
-﻿namespace Core.RegularExpressions;
+﻿using Core.RegularExpressions.Algorithms;
+
+namespace Core.RegularExpressions;
 
 public class SequenceNode : Node
 {
@@ -12,7 +14,16 @@ public class SequenceNode : Node
         Add(node);
     }
 
+    public int Count() => _children.Count;
+
     public Node Last() => _children.Last();
+
+    public override void Accept(IVisitor visitor)
+    {
+        foreach (var node in _children)
+            node.Accept(visitor);
+        visitor.Visit(this);
+    }
 
     public override bool IsMatch(List<char> input)
     {

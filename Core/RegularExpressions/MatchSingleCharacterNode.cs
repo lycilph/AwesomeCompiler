@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Core.RegularExpressions.Algorithms;
+using System.Diagnostics;
 
 namespace Core.RegularExpressions;
 
@@ -10,6 +11,11 @@ public class MatchSingleCharacterNode : Node
     public MatchSingleCharacterNode(char value)
     {
         _value = value;
+    }
+
+    public override void Accept(IVisitor visitor)
+    {
+        visitor.Visit(this);
     }
 
     public override bool IsMatch(List<char> input)

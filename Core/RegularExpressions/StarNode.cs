@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Core.RegularExpressions.Algorithms;
+using System.Diagnostics;
 
 namespace Core.RegularExpressions;
 
@@ -10,6 +11,12 @@ public class StarNode : Node
     public StarNode(Node? child = null)
     {
         Child = child;
+    }
+
+    public override void Accept(IVisitor visitor)
+    {
+        Child!.Accept(visitor);
+        visitor.Visit(this);
     }
 
     public override bool IsMatch(List<char> input)
