@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace AwesomeCompiler;
 
-namespace AwesomeCompiler
+internal class Scanner
 {
-    internal class Scanner
-    {
-    }
 }

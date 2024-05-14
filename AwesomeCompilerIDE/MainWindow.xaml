@@ -1,0 +1,52 @@
+﻿<Window x:Class="AwesomeCompilerIDE.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <DockPanel>
+            <Button DockPanel.Dock="Bottom">Parse</Button>
+            
+            <RichTextBox>
+                <FlowDocument>
+                    <Paragraph>
+                        [0-9]+(.[0-9]+(g*))?
+                    </Paragraph>
+                </FlowDocument>
+            </RichTextBox>
+        </DockPanel>
+
+        <TreeView Grid.Column="1">
+            <TreeViewItem Header="Sequence" IsExpanded="True">
+                <TreeViewItem Header="+" IsExpanded="True">
+                    <TreeViewItem Header="[0-9]" IsExpanded="True"/>
+                </TreeViewItem>
+                <TreeViewItem Header="?" IsExpanded="True">
+                    <TreeViewItem Header="group" IsExpanded="True">
+                        <TreeViewItem Header="Sequence" IsExpanded="True">
+                            <TreeViewItem Header="." IsExpanded="True">
+                                <TreeViewItem Header="+" IsExpanded="True">
+                                    <TreeViewItem Header="[0-9]" IsExpanded="True"/>
+                                </TreeViewItem>
+                                <TreeViewItem Header="group" IsExpanded="True">
+                                    <TreeViewItem Header="Sequence" IsExpanded="True">
+                                        <TreeViewItem Header="*" IsExpanded="True">
+                                            <TreeViewItem Header="g" IsExpanded="True"/>
+                                        </TreeViewItem>
+                                    </TreeViewItem>
+                                </TreeViewItem>
+                            </TreeViewItem>
+                        </TreeViewItem>
+                    </TreeViewItem>
+                </TreeViewItem>
+            </TreeViewItem>
+        </TreeView>
+    </Grid>
+</Window>
