@@ -33,6 +33,11 @@ public class CharacterSetNode : Node
 
     public void AddSet(CharacterSetNode set) => _chars.UnionWith(set._chars);
 
+    public override void ReplaceNode(Node oldNode, Node newNode)
+    {
+        throw new NotImplementedException();
+    }
+
     public override void Accept(IVisitor visitor)
     {
         visitor.Visit(this);

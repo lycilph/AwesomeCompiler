@@ -6,6 +6,11 @@ namespace Core.RegularExpressions;
 [DebuggerDisplay(". node")]
 public class MatchAnyCharacterNode : Node
 {
+    public override void ReplaceNode(Node oldNode, Node newNode)
+    {
+        throw new NotImplementedException();
+    }
+
     public override void Accept(IVisitor visitor)
     {
         visitor.Visit(this);

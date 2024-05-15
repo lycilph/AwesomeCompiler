@@ -6,8 +6,28 @@ namespace Core.RegularExpressions;
 [DebuggerDisplay("| node")]
 public class AlternationNode : Node
 {
-    public Node? Left { get; set; }
-    public Node? Right { get; set; }
+    private Node? left;
+    private Node? right;
+
+    public Node? Left { get => left;
+        set 
+        {
+            left = value;
+            if (left != null)
+                left.Parent = this;
+        }}
+    public Node? Right { get => right; 
+        set
+        { 
+            right = value; 
+            if (right != null)
+                right.Parent = this;
+        }}
+
+    public override void ReplaceNode(Node oldNode, Node newNode)
+    {
+        throw new NotImplementedException();
+    }
 
     public override void Accept(IVisitor visitor)
     {

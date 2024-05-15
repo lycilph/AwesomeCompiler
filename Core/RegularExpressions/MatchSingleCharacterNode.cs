@@ -13,6 +13,11 @@ public class MatchSingleCharacterNode : Node
         _value = value;
     }
 
+    public override void ReplaceNode(Node oldNode, Node newNode)
+    {
+        throw new NotImplementedException();
+    }
+
     public override void Accept(IVisitor visitor)
     {
         visitor.Visit(this);

@@ -6,11 +6,16 @@ public class SequenceNode : Node
 {
     private readonly List<Node> _children = [];
 
-    public void Add(Node node) => _children.Add(node);
+    public void Add(Node node) 
+    {
+        _children.Add(node);
+        node.Parent = this;
+    } 
 
     public void ReplaceLast(Node node)
     {
         _children.RemoveAt(_children.Count-1);
+        node.Parent = this;
         Add(node);
     }
 
@@ -18,10 +23,18 @@ public class SequenceNode : Node
 
     public Node Last() => _children.Last();
 
+    public override void ReplaceNode(Node oldNode, Node newNode)
+    {
+        var index = _children.IndexOf(oldNode);
+        _children[index] = newNode;
+        newNode.Parent = this;
+    }
+
     public override void Accept(IVisitor visitor)
     {
-        foreach (var node in _children)
-            node.Accept(visitor);
+        // Cannot use foreach here, as the list might change during enumeration
+        for (int i = 0; i < _children.Count; i++)
+            _children[i].Accept(visitor);
         visitor.Visit(this);
     }
 

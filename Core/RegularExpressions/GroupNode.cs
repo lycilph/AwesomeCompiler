@@ -6,11 +6,27 @@ namespace Core.RegularExpressions;
 [DebuggerDisplay("group node")]
 public class GroupNode : Node
 {
-    public Node Child { get; private set; }
+    private Node child;
+
+    public Node Child
+    {
+        get => child;
+        private set
+        {
+            child = value;
+            if (child != null)
+                child.Parent = this;
+        }
+    }
 
     public GroupNode(Node child)
     {
         Child = child;
+    }
+
+    public override void ReplaceNode(Node oldNode, Node newNode)
+    {
+        Child = newNode;
     }
 
     public override void Accept(IVisitor visitor)
