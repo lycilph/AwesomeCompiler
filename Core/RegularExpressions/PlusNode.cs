@@ -47,6 +47,11 @@ public class PlusNode : Node
         return result;
     }
 
+    public override NFA.Graph ConvertToNFA()
+    {
+        throw new NotImplementedException();
+    }
+
     public override bool Equals(Node? other)
     {
         if (other != null && other is PlusNode plus)

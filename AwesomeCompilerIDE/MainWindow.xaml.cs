@@ -1,16 +1,19 @@
-﻿using Core.RegularExpressions;
+﻿using Core.NFA;
+using Core.RegularExpressions;
 using Core.RegularExpressions.Algorithms;
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media.Imaging;
 
 namespace AwesomeCompilerIDE;
 
 public partial class MainWindow : Window
 {
     private string pattern = string.Empty;
-    private Node? root = null;
+    private Core.RegularExpressions.Node? root = null;
 
     public MainWindow()
     {
@@ -42,6 +45,40 @@ public partial class MainWindow : Window
         }
     }
 
+    private void ConvertToNFAButtonClick(object sender, RoutedEventArgs e)
+    {
+        //if (root != null)
+        {
+            root = new CharacterSetNode("0-9");
+
+            var graph = root.ConvertToNFA();
+            var dotGraph = graph.GenerateDotGraph();
+            File.WriteAllText("graph.txt", dotGraph);
+
+            var process = new Process();
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = "dot.exe",
+                Arguments = "graph.txt -Tpng -ograph.png",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            process.StartInfo = startInfo;
+            process.Start();
+
+            Debug.WriteLine("std out: " + process.StandardOutput.ReadToEnd());
+            Debug.WriteLine("std err: " + process.StandardError.ReadToEnd());
+
+            process.WaitForExit();
+
+            var bmp = new BitmapImage(new Uri("graph.png", UriKind.Relative));
+            image.Source = bmp;
+        }
+    }
+
     private void ConvertToTreeview()
     {
         if (root != null)
@@ -51,7 +88,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private void ConvertToTreeview(Node node, TreeViewItem? current)
+    private void ConvertToTreeview(Core.RegularExpressions.Node node, TreeViewItem? current)
     {
         TreeViewItem item = new TreeViewItem();
         switch (node)
@@ -101,8 +138,7 @@ public partial class MainWindow : Window
                 AddItem(current, item);
                 break;
             default:
-                Debug.WriteLine($"Unknown node type {node.GetType()}");
-                break;
+                throw new ArgumentException($"Unknown node type {node.GetType()}");
         }
     }
 

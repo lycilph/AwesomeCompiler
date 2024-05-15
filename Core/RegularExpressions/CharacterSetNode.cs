@@ -55,6 +55,18 @@ public class CharacterSetNode : Node
         return false;
     }
 
+    public override NFA.Graph ConvertToNFA()
+    {
+        var graph = new NFA.Graph
+        {
+            Start = new NFA.Node(),
+            End = new NFA.Node(true)
+        };
+        graph.Start.AddTransition(graph.End, _chars);
+
+        return graph;
+    }
+
     public override bool Equals(Node? other)
     {
         if (other != null && other is CharacterSetNode set)

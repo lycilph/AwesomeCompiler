@@ -40,6 +40,11 @@ public class OptionalNode : Node
         return true;
     }
 
+    public override NFA.Graph ConvertToNFA()
+    {
+        throw new NotImplementedException();
+    }
+
     public override bool Equals(Node? other)
     {
         if (other != null && other is OptionalNode optional)

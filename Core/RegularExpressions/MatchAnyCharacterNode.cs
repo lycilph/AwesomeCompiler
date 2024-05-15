@@ -1,4 +1,5 @@
 ﻿using Core.RegularExpressions.Algorithms;
+using System;
 using System.Diagnostics;
 
 namespace Core.RegularExpressions;
@@ -24,6 +25,18 @@ public class MatchAnyCharacterNode : Node
             return true;
         }
         return false;
+    }
+
+    public override NFA.Graph ConvertToNFA()
+    {
+        var graph = new NFA.Graph
+        {
+            Start = new NFA.Node(),
+            End = new NFA.Node(true)
+        };
+        graph.Start.AddMatchAnyTransition(graph.End);
+
+        return graph;
     }
 
     public override bool Equals(Node? other)

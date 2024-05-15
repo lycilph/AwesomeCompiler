@@ -44,6 +44,11 @@ public class StarNode : Node
         return true;
     }
 
+    public override NFA.Graph ConvertToNFA()
+    {
+        throw new NotImplementedException();
+    }
+
     public override bool Equals(Node? other)
     {
         if (other != null && other is StarNode star)

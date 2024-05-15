@@ -1,4 +1,6 @@
-﻿namespace Core.RegularExpressions;
+﻿using Core.NFA;
+
+namespace Core.RegularExpressions;
 
 public class Regex
 {
@@ -17,6 +19,8 @@ public class Regex
     {
         return _root.IsMatch(input.ToList());
     }
+
+    public Graph ConvertToNFA() => _root.ConvertToNFA();
 
     public Node GetRoot() => _root;
 

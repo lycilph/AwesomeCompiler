@@ -6,19 +6,19 @@ namespace Core.RegularExpressions;
 [DebuggerDisplay("group node")]
 public class GroupNode : Node
 {
-    private Node child;
+    private Node _child = null!;
 
     public Node Child
     {
-        get => child;
+        get => _child;
         private set
         {
-            child = value;
-            if (child != null)
-                child.Parent = this;
+            _child = value;
+            if (_child != null)
+                _child.Parent = this;
         }
     }
-
+    
     public GroupNode(Node child)
     {
         Child = child;
@@ -36,6 +36,11 @@ public class GroupNode : Node
     }
 
     public override bool IsMatch(List<char> input) => Child.IsMatch(input);
+
+    public override NFA.Graph ConvertToNFA()
+    {
+        throw new NotImplementedException();
+    }
 
     public override bool Equals(Node? other)
     {

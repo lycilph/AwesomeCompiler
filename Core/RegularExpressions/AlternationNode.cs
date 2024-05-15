@@ -45,6 +45,11 @@ public class AlternationNode : Node
         return false;
     }
 
+    public override NFA.Graph ConvertToNFA()
+    {
+        throw new NotImplementedException();
+    }
+
     public override bool Equals(Node? other)
     {
         if (other != null && other is AlternationNode alternation)
