@@ -23,6 +23,8 @@ public class CharacterSetNode : Node
         AddRange(parts[0][0], parts[1][0]);
     }
 
+    public int Count() => _chars.Count;
+
     public void AddRange(char start, char end)
     {
         for (char c = start; c <= end; c++)

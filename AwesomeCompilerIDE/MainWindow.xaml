@@ -12,41 +12,18 @@
         </Grid.ColumnDefinitions>
 
         <DockPanel>
-            <Button DockPanel.Dock="Bottom">Parse</Button>
+            <Button DockPanel.Dock="Bottom" Click="SimplifyButtonClick" Margin="0 5 0 0">Simplify</Button>
+            <Button DockPanel.Dock="Bottom" Click="ParseButtonClick">Parse</Button>
             
-            <RichTextBox>
+            <RichTextBox x:Name="textbox">
                 <FlowDocument>
                     <Paragraph>
-                        [0-9]+(.[0-9]+(g*))?
+                        [0-9]+(.[0-9]+(a|b)(g*))?
                     </Paragraph>
                 </FlowDocument>
             </RichTextBox>
         </DockPanel>
 
-        <TreeView Grid.Column="1">
-            <TreeViewItem Header="Sequence" IsExpanded="True">
-                <TreeViewItem Header="+" IsExpanded="True">
-                    <TreeViewItem Header="[0-9]" IsExpanded="True"/>
-                </TreeViewItem>
-                <TreeViewItem Header="?" IsExpanded="True">
-                    <TreeViewItem Header="group" IsExpanded="True">
-                        <TreeViewItem Header="Sequence" IsExpanded="True">
-                            <TreeViewItem Header="." IsExpanded="True">
-                                <TreeViewItem Header="+" IsExpanded="True">
-                                    <TreeViewItem Header="[0-9]" IsExpanded="True"/>
-                                </TreeViewItem>
-                                <TreeViewItem Header="group" IsExpanded="True">
-                                    <TreeViewItem Header="Sequence" IsExpanded="True">
-                                        <TreeViewItem Header="*" IsExpanded="True">
-                                            <TreeViewItem Header="g" IsExpanded="True"/>
-                                        </TreeViewItem>
-                                    </TreeViewItem>
-                                </TreeViewItem>
-                            </TreeViewItem>
-                        </TreeViewItem>
-                    </TreeViewItem>
-                </TreeViewItem>
-            </TreeViewItem>
-        </TreeView>
+        <TreeView Grid.Column="1" x:Name="treeview"/>
     </Grid>
 </Window>

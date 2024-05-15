@@ -6,11 +6,11 @@ namespace Core.RegularExpressions;
 [DebuggerDisplay("Single character node [{_value}]")]
 public class MatchSingleCharacterNode : Node
 {
-    private readonly char _value;
+    public char Value { get; private set; }
 
     public MatchSingleCharacterNode(char value)
     {
-        _value = value;
+        Value = value;
     }
 
     public override void ReplaceNode(Node oldNode, Node newNode)
@@ -25,7 +25,7 @@ public class MatchSingleCharacterNode : Node
 
     public override bool IsMatch(List<char> input)
     {
-        if (input.Count > 0 && input.First() == _value) 
+        if (input.Count > 0 && input.First() == Value) 
         {
             input.RemoveAt(0);
             return true;
@@ -36,7 +36,7 @@ public class MatchSingleCharacterNode : Node
     public override bool Equals(Node? other)
     {
         if (other != null && other is MatchSingleCharacterNode sc)
-            return _value == sc._value;
+            return Value == sc.Value;
         else
             return false;
     }

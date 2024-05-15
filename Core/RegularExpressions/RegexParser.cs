@@ -96,6 +96,10 @@ public class RegexParser
                 node = new MatchAnyCharacterNode();
                 current++;
                 break;
+            case '\\':
+                node = new MatchSingleCharacterNode(Peek());
+                current += 2;
+                break;
             default:
                 node = new MatchSingleCharacterNode(c);
                 current++;
@@ -139,4 +143,6 @@ public class RegexParser
 
         return node;
     }
+
+    private char Peek() => _pattern[current + 1];
 }
