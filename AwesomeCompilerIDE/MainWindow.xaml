@@ -16,7 +16,7 @@
             <Button DockPanel.Dock="Bottom" Click="SimplifyButtonClick" Margin="0 5 0 0">Simplify</Button>
             <Button DockPanel.Dock="Bottom" Click="ParseButtonClick">Parse</Button>
 
-            <Image x:Name="image" DockPanel.Dock="Bottom" Height="400" Width="400" Margin="0 5 0 0" Source="/graph.png"/>
+            <Image x:Name="image" DockPanel.Dock="Bottom" Height="400" Width="400" Margin="0 5 0 0"/>
 
             <RichTextBox x:Name="textbox">
                 <FlowDocument>

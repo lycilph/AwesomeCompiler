@@ -7,6 +7,19 @@ public class Graph
     public Node Start { get; set; } = null!;
     public Node End { get; set; } = null!;
 
+    public void Concatenate(Graph other)
+    {
+        End.IsFinal = false;
+
+        var temp = other.Start;
+        other.Start = End;
+        foreach (var t in temp.Transitions)
+        {
+            t.FromNode = End;
+            End.Transitions.Add(t);
+        }
+    }
+
     public string GenerateDotGraph()
     {
         var sb = new StringBuilder();
@@ -32,7 +45,14 @@ public class Graph
 
                 foreach (var t in node.Transitions)
                 {
-                    sb.AppendLine($"{t.FromNode.Id} -> {t.ToNode.Id}");
+                    var label = string.Empty;
+                    if (t.Epsilon)
+                        label = "Epsilon";
+                    else if (t.MatchAny)
+                        label = ".";
+                    else
+                        label = string.Join("", t.Chars);
+                    sb.AppendLine($"{t.FromNode.Id} -> {t.ToNode.Id} [label=\"{label}\"]");
                     toVisit.Push(t.ToNode);
                 }
             }

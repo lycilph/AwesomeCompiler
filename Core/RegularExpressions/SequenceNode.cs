@@ -48,7 +48,13 @@ public class SequenceNode : Node
 
     public override NFA.Graph ConvertToNFA()
     {
-        throw new NotImplementedException();
+        NFA.Graph? result = Children.First().ConvertToNFA();
+        for (int i = 1; i < Children.Count; i++)
+        {
+            var temp = Children[i].ConvertToNFA();
+            result.Concatenate(temp);
+        }
+        return result;
     }
 
     public override bool Equals(Node? other)

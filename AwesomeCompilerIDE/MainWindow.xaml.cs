@@ -1,5 +1,4 @@
-﻿using Core.NFA;
-using Core.RegularExpressions;
+﻿using Core.RegularExpressions;
 using Core.RegularExpressions.Algorithms;
 using System.Diagnostics;
 using System.IO;
@@ -47,35 +46,49 @@ public partial class MainWindow : Window
 
     private void ConvertToNFAButtonClick(object sender, RoutedEventArgs e)
     {
-        //if (root != null)
+        if (root != null)
         {
-            root = new CharacterSetNode("0-9");
-
-            var graph = root.ConvertToNFA();
-            var dotGraph = graph.GenerateDotGraph();
-            File.WriteAllText("graph.txt", dotGraph);
-
-            var process = new Process();
-            var startInfo = new ProcessStartInfo
+            try
             {
-                FileName = "dot.exe",
-                Arguments = "graph.txt -Tpng -ograph.png",
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
+                var dotInput = "graph.txt";
+                var dotOutput = "graph.png";
 
-            process.StartInfo = startInfo;
-            process.Start();
+                var graph = root.ConvertToNFA();
+                var dotGraph = graph.GenerateDotGraph();
+                File.WriteAllText(dotInput, dotGraph);
 
-            Debug.WriteLine("std out: " + process.StandardOutput.ReadToEnd());
-            Debug.WriteLine("std err: " + process.StandardError.ReadToEnd());
+                var process = new Process();
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = "dot.exe",
+                    Arguments = $"{dotInput} -Tpng -o{dotOutput}",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
 
-            process.WaitForExit();
+                process.StartInfo = startInfo;
+                process.Start();
 
-            var bmp = new BitmapImage(new Uri("graph.png", UriKind.Relative));
-            image.Source = bmp;
+                Debug.WriteLine("std out: " + process.StandardOutput.ReadToEnd());
+                Debug.WriteLine("std err: " + process.StandardError.ReadToEnd());
+
+                process.WaitForExit();
+
+                var path = Path.GetFullPath(dotOutput);
+                //var bmp = new BitmapImage(new Uri(path, UriKind.Absolute));
+                var bmp = new BitmapImage();
+                bmp.BeginInit();
+                bmp.UriSource = new Uri(path, UriKind.Absolute);
+                bmp.CacheOption = BitmapCacheOption.OnLoad;
+                bmp.EndInit();
+                image.Source = bmp;
+            }
+            catch (NotImplementedException ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
         }
     }
 
@@ -90,7 +103,7 @@ public partial class MainWindow : Window
 
     private void ConvertToTreeview(Core.RegularExpressions.Node node, TreeViewItem? current)
     {
-        TreeViewItem item = new TreeViewItem();
+        TreeViewItem item;
         switch (node)
         {
             case SequenceNode sequence:
