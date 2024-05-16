@@ -39,8 +39,8 @@ public class Graph
                         label = "Any";
                     else
                         label = t.Label;
-                    sb.AppendLine($"{t.FromNode.Id} -> {t.ToNode.Id} [label=\"{label}\"]");
-                    toVisit.Push(t.ToNode);
+                    sb.AppendLine($"{t.From.Id} -> {t.To.Id} [label=\"{label}\"]");
+                    toVisit.Push(t.To);
                 }
             }
         }

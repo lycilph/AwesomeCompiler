@@ -189,6 +189,12 @@ public partial class MainWindow : Window
         textbox.Document.Blocks.Add(new Paragraph(new Run("[0-9]")));
     }
 
+    private void Exp3ButtonClick(object sender, RoutedEventArgs e)
+    {
+        textbox.Document.Blocks.Clear();
+        textbox.Document.Blocks.Add(new Paragraph(new Run("(a|b)*abb")));
+    }
+
     private void ClearButtonClick(object sender, RoutedEventArgs e)
     {
         textbox.Document.Blocks.Clear();

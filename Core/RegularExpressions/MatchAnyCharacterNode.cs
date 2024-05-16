@@ -1,5 +1,4 @@
 ﻿using Core.RegularExpressions.Algorithms;
-using System;
 using System.Diagnostics;
 
 namespace Core.RegularExpressions;
