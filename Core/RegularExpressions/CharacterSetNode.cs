@@ -62,7 +62,8 @@ public class CharacterSetNode : RegexNode
 
     public override bool IsMatch(List<char> input)
     {
-        if (input.Count > 0 && _chars.Contains(input.First()))
+        if (input.Count > 0 && ((!IsNegativeSet && _chars.Contains(input.First())) || 
+                                (IsNegativeSet && !_chars.Contains(input.First()))))
         {
             input.RemoveAt(0);
             return true;

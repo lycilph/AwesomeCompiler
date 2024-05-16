@@ -40,4 +40,24 @@ public class MatchSimpleExpressions
 
         Assert.True(regex.IsMatch(input1));
     }
+
+    [Fact]
+    public void MatchNegativeInput1()
+    {
+        var pattern = @"ab[^c]";
+        var regex = new Regex(pattern);
+
+        Assert.False(regex.IsMatch("abc"));
+        Assert.True(regex.IsMatch("abd"));
+    }
+
+    [Fact]
+    public void MatchNegativeInput2()
+    {
+        var pattern = @"[0-9][^a-z]";
+        var regex = new Regex(pattern);
+
+        Assert.True(regex.IsMatch("42"));
+        Assert.False(regex.IsMatch("0d"));
+    }
 }
