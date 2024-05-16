@@ -6,17 +6,25 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.TextFormatting;
 
 namespace AwesomeCompilerIDE;
 
 public partial class MainWindow : Window
 {
     private string pattern = string.Empty;
-    private Core.RegularExpressions.Node? root = null;
+    private Node? root;
 
     public MainWindow()
     {
         InitializeComponent();
+
+        image.ImageFailed += Image_ImageFailed;
+    }
+
+    private void Image_ImageFailed(object? sender, ExceptionRoutedEventArgs e)
+    {
+        Debug.WriteLine("Failed to load image");
     }
 
     private void ParseButtonClick(object sender, RoutedEventArgs e)
@@ -76,14 +84,20 @@ public partial class MainWindow : Window
 
                 process.WaitForExit();
 
+                // Image must be loaded through a stream, so that it does not lock the file
                 var path = Path.GetFullPath(dotOutput);
-                //var bmp = new BitmapImage(new Uri(path, UriKind.Absolute));
-                var bmp = new BitmapImage();
-                bmp.BeginInit();
-                bmp.UriSource = new Uri(path, UriKind.Absolute);
-                bmp.CacheOption = BitmapCacheOption.OnLoad;
-                bmp.EndInit();
-                image.Source = bmp;
+                var bitmap = new BitmapImage();
+                var stream = File.OpenRead(path);
+
+                bitmap.BeginInit();
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.StreamSource = stream;
+                bitmap.EndInit();
+                bitmap.Freeze();
+                stream.Close();
+                stream.Dispose();
+
+                image.Source = bitmap;
             }
             catch (NotImplementedException ex)
             {
