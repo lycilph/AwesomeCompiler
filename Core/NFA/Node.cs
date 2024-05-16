@@ -17,23 +17,14 @@ public class Node
         IsFinal = final;
     }
 
-    public void AddTransition(Node to, HashSet<char> chars, string label = "")
-    {
-        Transitions.Add(Transition<Node>.Create(this, to, chars, label));
-    }
+    public void AddEmptyTransition(Node to) => AddTransition(to, new Symbol() { isEpsilon = true, label = "Epsilon" });
 
-    public void AddTransition(Node to, char c)
-    {
-        Transitions.Add(Transition<Node>.Create(this, to, c));
-    }
+    public void AddAnyTransition(Node to) => AddTransition(to, new Symbol() { isAny = true, label = "Any" });
 
-    public void AddEmptyTransition(Node to)
-    {
-        Transitions.Add(Transition<Node>.CreateEmpty(this, to));
-    }
+    public void AddTransition(Node to, HashSet<char> chars, string label) => AddTransition(to, new Symbol() { chars = chars, label = label });
 
-    public void AddMatchAnyTransition(Node to)
+    public void AddTransition(Node to, Symbol symbol)
     {
-        Transitions.Add(Transition<Node>.CreateMatchAny(this, to));
+        Transitions.Add(new Transition<Node>(to, symbol));
     }
 }

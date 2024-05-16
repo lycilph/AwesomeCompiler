@@ -34,7 +34,7 @@ public class MatchAnyCharacterNode : RegexNode
             Start = new Node(),
             End = new Node(true)
         };
-        graph.Start.AddMatchAnyTransition(graph.End);
+        graph.Start.AddAnyTransition(graph.End);
 
         return graph;
     }

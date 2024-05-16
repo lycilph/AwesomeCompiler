@@ -41,7 +41,7 @@ public class MatchSingleCharacterNode : RegexNode
             Start = new Node(),
             End = new Node(true)
         };
-        graph.Start.AddTransition(graph.End, Value);
+        graph.Start.AddTransition(graph.End, [Value], Value.ToString());
 
         return graph;
     }

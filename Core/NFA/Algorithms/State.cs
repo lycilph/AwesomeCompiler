@@ -13,10 +13,10 @@ public class State
 
     public void Add(Node node) => nodes.Add(node);
 
-    public void AddTransition(State to, char c)
-    {
-        Transitions.Add(Transition<State>.Create(this, to, c));
-    }
+    //public void AddTransition(State to, char c)
+    //{
+    //    Transitions.Add(Transition<State>.Create(this, to, c));
+    //}
 
     private string Label()
     {
