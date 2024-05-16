@@ -48,12 +48,17 @@ public class SequenceNode : Node
 
     public override NFA.Graph ConvertToNFA()
     {
-        NFA.Graph? result = Children.First().ConvertToNFA();
+        var result = Children.First().ConvertToNFA();
+
         for (int i = 1; i < Children.Count; i++)
         {
             var temp = Children[i].ConvertToNFA();
-            result.Concatenate(temp);
+
+            result.End.IsFinal = false;
+            result.End.AddEmptyTransition(temp.Start);
+            result.End = temp.End;
         }
+
         return result;
     }
 

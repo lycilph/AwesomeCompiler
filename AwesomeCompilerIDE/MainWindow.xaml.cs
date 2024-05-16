@@ -176,4 +176,10 @@ public partial class MainWindow : Window
         else
             current.Items.Add(item);
     }
+
+    private void Exp1ButtonClick(object sender, RoutedEventArgs e)
+    {
+        textbox.Document.Blocks.Clear();
+        textbox.Document.Blocks.Add(new Paragraph(new Run("[0-9]+(\.[0-9]+(a|b)(g*))?")));
+    }
 }

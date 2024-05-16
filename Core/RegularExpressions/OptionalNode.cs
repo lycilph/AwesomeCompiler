@@ -42,7 +42,20 @@ public class OptionalNode : Node
 
     public override NFA.Graph ConvertToNFA()
     {
-        throw new NotImplementedException();
+        var graph = Child!.ConvertToNFA();
+
+        var start = new NFA.Node();
+        var end = new NFA.Node(true);
+
+        start.AddEmptyTransition(graph.Start);
+        graph.End.AddEmptyTransition(end);
+        start.AddEmptyTransition(end);
+
+        graph.Start = start;
+        graph.End.IsFinal = false;
+        graph.End = end;
+
+        return graph;
     }
 
     public override bool Equals(Node? other)

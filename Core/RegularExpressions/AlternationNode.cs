@@ -47,7 +47,23 @@ public class AlternationNode : Node
 
     public override NFA.Graph ConvertToNFA()
     {
-        throw new NotImplementedException();
+        var leftNFA = Left!.ConvertToNFA();
+        var rightNFA = Right!.ConvertToNFA();
+
+        var start = new NFA.Node();
+        var end = new NFA.Node(true);
+
+        start.AddEmptyTransition(leftNFA.Start);
+        start.AddEmptyTransition(rightNFA.Start);
+        leftNFA.End.AddEmptyTransition(end);
+        rightNFA.End.AddEmptyTransition(end);
+
+        leftNFA.Start = start;
+        leftNFA.End.IsFinal = false;
+        rightNFA.End.IsFinal = false;
+        leftNFA.End = end;
+
+        return leftNFA;
     }
 
     public override bool Equals(Node? other)

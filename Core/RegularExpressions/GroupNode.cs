@@ -39,7 +39,7 @@ public class GroupNode : Node
 
     public override NFA.Graph ConvertToNFA()
     {
-        throw new NotImplementedException();
+        return Child.ConvertToNFA();
     }
 
     public override bool Equals(Node? other)

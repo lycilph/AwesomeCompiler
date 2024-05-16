@@ -7,7 +7,7 @@ namespace Core.RegularExpressions;
 [DebuggerDisplay("Character set node [{_chars.Count} characters]")]
 public class CharacterSetNode : Node
 {
-    private HashSet<char> _chars = [];
+    private readonly HashSet<char> _chars = [];
     public bool IsNegativeSet { get; set; }
 
     public CharacterSetNode() {}
@@ -37,7 +37,7 @@ public class CharacterSetNode : Node
 
     public override void ReplaceNode(Node oldNode, Node newNode)
     {
-        throw new NotImplementedException();
+        throw new InvalidOperationException("A CharacterSetNode cannot replace a node");
     }
 
     public override void Accept(IVisitor visitor)
