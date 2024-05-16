@@ -1,4 +1,5 @@
-﻿using Core.RegularExpressions;
+﻿using Core.NFA.Algorithms;
+using Core.RegularExpressions;
 using Core.RegularExpressions.Algorithms;
 using System.Diagnostics;
 using System.IO;
@@ -61,7 +62,7 @@ public partial class MainWindow : Window
                 var dotOutput = "graph.png";
 
                 var graph = root.ConvertToNFA();
-                var dotGraph = graph.GenerateDotGraph();
+                var dotGraph = DotGraphGenerator.Generate(graph.Start);
                 File.WriteAllText(dotInput, dotGraph);
 
                 var process = new Process();
@@ -114,7 +115,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private void ConvertToTreeview(Core.RegularExpressions.RegexNode node, TreeViewItem? current)
+    private void ConvertToTreeview(RegexNode node, TreeViewItem? current)
     {
         TreeViewItem item;
         switch (node)
