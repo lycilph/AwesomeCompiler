@@ -44,7 +44,7 @@ public class SimplifyExpressions
     }
 
     [Fact]
-    public void SimplifyAlternationExpressions()
+    public void SimplifyAlternationExpressions1()
     {
         var regex = new Regex("[0-9]|[a-z]");
         var visitor = new SimplifyVisitor();
@@ -56,6 +56,23 @@ public class SimplifyExpressions
         var set = new CharacterSetNode("0-9");
         set.AddRange('a','z');
         seq.Add(set);
+
+        // Compare trees
+        Assert.Equal(regex.GetRoot(), seq);
+    }
+
+
+    [Fact]
+    public void SimplifyAlternationExpressions2()
+    {
+        var regex = new Regex("a|(b)");
+        var visitor = new SimplifyVisitor();
+
+        regex.GetRoot().Accept(visitor);
+
+        // Create tree manually here
+        var seq = new SequenceNode();
+        seq.Add(new CharacterSetNode('a','b'));
 
         // Compare trees
         Assert.Equal(regex.GetRoot(), seq);

@@ -3,12 +3,13 @@ using System.Diagnostics;
 
 namespace Core.RegularExpressions;
 
-// nq = no qoutes around the string _pattern
-[DebuggerDisplay("Character set node [{_chars.Count} characters]")]
+// nq = no qoutes around the string
+[DebuggerDisplay("Character set node [{Label}] {_chars.Count} characters")]
 public class CharacterSetNode : Node
 {
     private readonly HashSet<char> _chars = [];
     public bool IsNegativeSet { get; set; }
+    public string Label { get; set; } = string.Empty;
 
     public CharacterSetNode() {}
     public CharacterSetNode(char start, char end, bool isNegativeSet = false)
@@ -28,12 +29,21 @@ public class CharacterSetNode : Node
     public void AddRange(char start, char end)
     {
         for (char c = start; c <= end; c++)
-            AddCharacter(c);
+            _chars.Add(c);
+        Label += $"{start}-{end}";
     }
 
-    public void AddCharacter(char c) => _chars.Add(c);
+    public void AddCharacter(char c)
+    {
+        _chars.Add(c);
+        Label += c;
+    }
 
-    public void AddSet(CharacterSetNode set) => _chars.UnionWith(set._chars);
+    public void AddSet(CharacterSetNode set)
+    {
+        _chars.UnionWith(set._chars);
+        Label += set.Label;
+    }
 
     public override void ReplaceNode(Node oldNode, Node newNode)
     {
@@ -62,7 +72,7 @@ public class CharacterSetNode : Node
             Start = new NFA.Node(),
             End = new NFA.Node(true)
         };
-        graph.Start.AddTransition(graph.End, _chars);
+        graph.Start.AddTransition(graph.End, _chars, Label);
 
         return graph;
     }

@@ -17,9 +17,9 @@ public class Node
         IsFinal = final;
     }
 
-    public void AddTransition(Node to, HashSet<char> chars)
+    public void AddTransition(Node to, HashSet<char> chars, string label = "")
     {
-        Transitions.Add(Transition.Create(this, to, chars));
+        Transitions.Add(Transition.Create(this, to, chars, label));
     }
 
     public void AddTransition(Node to, char c)

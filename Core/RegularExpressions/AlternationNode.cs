@@ -26,7 +26,12 @@ public class AlternationNode : Node
 
     public override void ReplaceNode(Node oldNode, Node newNode)
     {
-        throw new NotImplementedException();
+        if (oldNode == left)
+            left = newNode;
+        else if (oldNode == right)
+            right = newNode;
+        else
+            throw new ArgumentException("Node doesn't match either the left or the right node");
     }
 
     public override void Accept(IVisitor visitor)

@@ -20,6 +20,8 @@
             <DockPanel DockPanel.Dock="Top" Height="250">
                 <StackPanel DockPanel.Dock="Right">
                     <Button Click="Exp1ButtonClick">Exp1</Button>
+                    <Button Click="Exp2ButtonClick">Exp2</Button>
+                    <Button Click="ClearButtonClick">Clear</Button>
                 </StackPanel>
                 
                 <RichTextBox x:Name="textbox">

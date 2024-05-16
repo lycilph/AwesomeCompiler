@@ -8,6 +8,7 @@ public class Transition
     public HashSet<char> Chars { get; set; } = [];
     public Node FromNode { get; set; } = null!;
     public Node ToNode { get; set; } = null!;
+    public string Label { get; set; } = string.Empty;
 
     public static Transition CreateEmpty(Node from, Node to)
     {
@@ -34,19 +35,21 @@ public class Transition
         var result = new Transition()
         {
             FromNode = from,
-            ToNode = to
+            ToNode = to,
+            Label = c.ToString()
         };
         result.Chars.Add(c);
 
         return result;
     }
 
-    public static Transition Create(Node from, Node to, HashSet<char> chars)
+    public static Transition Create(Node from, Node to, HashSet<char> chars, string label = "")
     {
         var result = new Transition()
         {
             FromNode = from,
-            ToNode = to
+            ToNode = to,
+            Label = string.IsNullOrEmpty(label) ? string.Join("", chars) : label,
         };
         result.Chars.UnionWith(chars);
 

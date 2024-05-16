@@ -32,13 +32,13 @@ public class Graph
 
                 foreach (var t in node.Transitions)
                 {
-                    var label = string.Empty;
+                    string? label;
                     if (t.Epsilon)
                         label = "Epsilon";
                     else if (t.MatchAny)
                         label = "Any";
                     else
-                        label = string.Join("", t.Chars);
+                        label = t.Label;
                     sb.AppendLine($"{t.FromNode.Id} -> {t.ToNode.Id} [label=\"{label}\"]");
                     toVisit.Push(t.ToNode);
                 }
