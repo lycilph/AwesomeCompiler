@@ -1,18 +1,19 @@
-﻿using Core.RegularExpressions.Algorithms;
+﻿using Core.NFA;
+using Core.RegularExpressions.Algorithms;
 
 namespace Core.RegularExpressions;
 
-public class SequenceNode : Node
+public class SequenceNode : RegexNode
 {
-    public List<Node> Children { get; private set; } = [];
+    public List<RegexNode> Children { get; private set; } = [];
 
-    public void Add(Node node) 
+    public void Add(RegexNode node) 
     {
         Children.Add(node);
         node.Parent = this;
     } 
 
-    public void ReplaceLast(Node node)
+    public void ReplaceLast(RegexNode node)
     {
         Children.RemoveAt(Children.Count-1);
         node.Parent = this;
@@ -21,9 +22,9 @@ public class SequenceNode : Node
 
     public int Count() => Children.Count;
 
-    public Node Last() => Children.Last();
+    public RegexNode Last() => Children.Last();
 
-    public override void ReplaceNode(Node oldNode, Node newNode)
+    public override void ReplaceNode(RegexNode oldNode, RegexNode newNode)
     {
         var index = Children.IndexOf(oldNode);
         Children[index] = newNode;
@@ -40,13 +41,13 @@ public class SequenceNode : Node
 
     public override bool IsMatch(List<char> input)
     {
-        foreach (Node node in Children)
+        foreach (RegexNode node in Children)
             if (!node.IsMatch(input))
                 return false;
         return true;
     }
 
-    public override NFA.Graph ConvertToNFA()
+    public override Graph ConvertToNFA()
     {
         var result = Children.First().ConvertToNFA();
 
@@ -62,7 +63,7 @@ public class SequenceNode : Node
         return result;
     }
 
-    public override bool Equals(Node? other)
+    public override bool Equals(RegexNode? other)
     {
         if (other != null && other is SequenceNode seq) 
         {

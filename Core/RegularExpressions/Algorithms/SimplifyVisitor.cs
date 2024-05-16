@@ -14,27 +14,11 @@ public class SimplifyVisitor : IVisitor
             leftSet.AddSet(rightSet);
             alternation.Parent.ReplaceNode(alternation, leftSet);
         }
-        else if (alternation.Left is MatchSingleCharacterNode singleLeft &&
-                 alternation.Right is MatchSingleCharacterNode singleRight)
+        else if ((alternation.Left is MatchAnyCharacterNode && alternation.Right is CharacterSetNode) ||
+                 (alternation.Right is MatchAnyCharacterNode && alternation.Left is CharacterSetNode))
         {
-            var set = new CharacterSetNode();
-            set.AddCharacter(singleLeft.Value);
-            set.AddCharacter(singleRight.Value);
-
-            alternation.Parent.ReplaceNode(alternation, set);
-        }
-        else if (alternation.Left is MatchAnyCharacterNode anyCharacterLeft &&
-                (alternation.Right is MatchSingleCharacterNode ||
-                 alternation.Right is CharacterSetNode))
-        {
-            alternation.Parent.ReplaceNode(alternation, anyCharacterLeft);
-        }
-        else if (alternation.Right is MatchAnyCharacterNode anyCharacterRight &&
-                (alternation.Left is MatchSingleCharacterNode ||
-                 alternation.Left is CharacterSetNode))
-        {
-            alternation.Parent.ReplaceNode(alternation, anyCharacterRight);
-        }
+            alternation.Parent.ReplaceNode(alternation, new MatchAnyCharacterNode());
+        }     
     }
 
     public void Visit(CharacterSetNode characterSet) {}
@@ -53,7 +37,11 @@ public class SimplifyVisitor : IVisitor
 
     public void Visit(MatchAnyCharacterNode matchAny) {}
 
-    public void Visit(MatchSingleCharacterNode matchSingleCharacter) {}
+    public void Visit(MatchSingleCharacterNode matchSingleCharacter) 
+    {
+        if (matchSingleCharacter.Parent != null)
+            matchSingleCharacter.Parent.ReplaceNode(matchSingleCharacter, new CharacterSetNode(matchSingleCharacter.Value));
+    }
 
     public void Visit(OptionalNode optional) {}
 

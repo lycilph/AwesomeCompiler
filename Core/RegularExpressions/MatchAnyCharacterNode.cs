@@ -1,14 +1,15 @@
-﻿using Core.RegularExpressions.Algorithms;
+﻿using Core.NFA;
+using Core.RegularExpressions.Algorithms;
 using System.Diagnostics;
 
 namespace Core.RegularExpressions;
 
 [DebuggerDisplay(". node")]
-public class MatchAnyCharacterNode : Node
+public class MatchAnyCharacterNode : RegexNode
 {
-    public override void ReplaceNode(Node oldNode, Node newNode)
+    public override void ReplaceNode(RegexNode oldNode, RegexNode newNode)
     {
-        throw new NotImplementedException();
+        throw new InvalidOperationException("A MatchAnyCharacterNode cannot replace a node");
     }
 
     public override void Accept(IVisitor visitor)
@@ -26,19 +27,19 @@ public class MatchAnyCharacterNode : Node
         return false;
     }
 
-    public override NFA.Graph ConvertToNFA()
+    public override Graph ConvertToNFA()
     {
-        var graph = new NFA.Graph
+        var graph = new Graph
         {
-            Start = new NFA.Node(),
-            End = new NFA.Node(true)
+            Start = new Node(),
+            End = new Node(true)
         };
         graph.Start.AddMatchAnyTransition(graph.End);
 
         return graph;
     }
 
-    public override bool Equals(Node? other)
+    public override bool Equals(RegexNode? other)
     {
         return other != null && other is MatchAnyCharacterNode;
     }

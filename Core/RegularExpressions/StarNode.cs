@@ -1,14 +1,15 @@
-﻿using Core.RegularExpressions.Algorithms;
+﻿using Core.NFA;
+using Core.RegularExpressions.Algorithms;
 using System.Diagnostics;
 
 namespace Core.RegularExpressions;
 
 [DebuggerDisplay("* node")]
-public class StarNode : Node
+public class StarNode : RegexNode
 {
-    private Node? child;
+    private RegexNode? child;
 
-    public Node? Child { get => child; 
+    public RegexNode? Child { get => child; 
         set 
         { 
             child = value; 
@@ -16,14 +17,14 @@ public class StarNode : Node
                 child.Parent = this;
         }}
 
-    public StarNode(Node? child = null)
+    public StarNode(RegexNode? child = null)
     {
         Child = child;
         if (Child != null)
             Child.Parent = this;
     }
 
-    public override void ReplaceNode(Node oldNode, Node newNode)
+    public override void ReplaceNode(RegexNode oldNode, RegexNode newNode)
     {
         Child = newNode;
     }
@@ -44,12 +45,12 @@ public class StarNode : Node
         return true;
     }
 
-    public override NFA.Graph ConvertToNFA()
+    public override Graph ConvertToNFA()
     {
         var graph = Child!.ConvertToNFA();
 
-        var start = new NFA.Node();
-        var end = new NFA.Node(true);
+        var start = new Node();
+        var end = new Node(true);
 
         start.AddEmptyTransition(graph.Start);
         end.AddEmptyTransition(start);
@@ -63,7 +64,7 @@ public class StarNode : Node
         return graph;
     }
 
-    public override bool Equals(Node? other)
+    public override bool Equals(RegexNode? other)
     {
         if (other != null && other is StarNode star)
             return Child != null && Child.Equals(star.Child);

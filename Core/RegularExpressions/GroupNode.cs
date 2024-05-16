@@ -1,14 +1,15 @@
-﻿using Core.RegularExpressions.Algorithms;
+﻿using Core.NFA;
+using Core.RegularExpressions.Algorithms;
 using System.Diagnostics;
 
 namespace Core.RegularExpressions;
 
 [DebuggerDisplay("group node")]
-public class GroupNode : Node
+public class GroupNode : RegexNode
 {
-    private Node _child = null!;
+    private RegexNode _child = null!;
 
-    public Node Child
+    public RegexNode Child
     {
         get => _child;
         private set
@@ -19,12 +20,12 @@ public class GroupNode : Node
         }
     }
     
-    public GroupNode(Node child)
+    public GroupNode(RegexNode child)
     {
         Child = child;
     }
 
-    public override void ReplaceNode(Node oldNode, Node newNode)
+    public override void ReplaceNode(RegexNode oldNode, RegexNode newNode)
     {
         Child = newNode;
     }
@@ -37,12 +38,12 @@ public class GroupNode : Node
 
     public override bool IsMatch(List<char> input) => Child.IsMatch(input);
 
-    public override NFA.Graph ConvertToNFA()
+    public override Graph ConvertToNFA()
     {
         return Child.ConvertToNFA();
     }
 
-    public override bool Equals(Node? other)
+    public override bool Equals(RegexNode? other)
     {
         if (other != null && other is GroupNode group)
             return Child.Equals(group.Child);

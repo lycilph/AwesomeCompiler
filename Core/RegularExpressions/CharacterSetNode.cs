@@ -1,17 +1,22 @@
-﻿using Core.RegularExpressions.Algorithms;
+﻿using Core.NFA;
+using Core.RegularExpressions.Algorithms;
 using System.Diagnostics;
 
 namespace Core.RegularExpressions;
 
 // nq = no qoutes around the string
 [DebuggerDisplay("Character set node [{Label}] {_chars.Count} characters")]
-public class CharacterSetNode : Node
+public class CharacterSetNode : RegexNode
 {
     private readonly HashSet<char> _chars = [];
     public bool IsNegativeSet { get; set; }
     public string Label { get; set; } = string.Empty;
 
     public CharacterSetNode() {}
+    public CharacterSetNode(char c)
+    {
+        AddCharacter(c);
+    }
     public CharacterSetNode(char start, char end, bool isNegativeSet = false)
     {
         IsNegativeSet = isNegativeSet;
@@ -45,7 +50,7 @@ public class CharacterSetNode : Node
         Label += set.Label;
     }
 
-    public override void ReplaceNode(Node oldNode, Node newNode)
+    public override void ReplaceNode(RegexNode oldNode, RegexNode newNode)
     {
         throw new InvalidOperationException("A CharacterSetNode cannot replace a node");
     }
@@ -65,19 +70,19 @@ public class CharacterSetNode : Node
         return false;
     }
 
-    public override NFA.Graph ConvertToNFA()
+    public override Graph ConvertToNFA()
     {
-        var graph = new NFA.Graph
+        var graph = new Graph
         {
-            Start = new NFA.Node(),
-            End = new NFA.Node(true)
+            Start = new Node(),
+            End = new Node(true)
         };
         graph.Start.AddTransition(graph.End, _chars, Label);
 
         return graph;
     }
 
-    public override bool Equals(Node? other)
+    public override bool Equals(RegexNode? other)
     {
         if (other != null && other is CharacterSetNode set)
             return _chars.SetEquals(set._chars) && IsNegativeSet == set.IsNegativeSet;

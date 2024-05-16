@@ -1,22 +1,23 @@
-﻿using Core.RegularExpressions.Algorithms;
+﻿using Core.NFA;
+using Core.RegularExpressions.Algorithms;
 using System.Diagnostics;
 
 namespace Core.RegularExpressions;
 
 [DebuggerDisplay("| node")]
-public class AlternationNode : Node
+public class AlternationNode : RegexNode
 {
-    private Node? left;
-    private Node? right;
+    private RegexNode? left;
+    private RegexNode? right;
 
-    public Node? Left { get => left;
+    public RegexNode? Left { get => left;
         set 
         {
             left = value;
             if (left != null)
                 left.Parent = this;
         }}
-    public Node? Right { get => right; 
+    public RegexNode? Right { get => right; 
         set
         { 
             right = value; 
@@ -24,7 +25,7 @@ public class AlternationNode : Node
                 right.Parent = this;
         }}
 
-    public override void ReplaceNode(Node oldNode, Node newNode)
+    public override void ReplaceNode(RegexNode oldNode, RegexNode newNode)
     {
         if (oldNode == left)
             left = newNode;
@@ -50,13 +51,13 @@ public class AlternationNode : Node
         return false;
     }
 
-    public override NFA.Graph ConvertToNFA()
+    public override Graph ConvertToNFA()
     {
         var leftNFA = Left!.ConvertToNFA();
         var rightNFA = Right!.ConvertToNFA();
 
-        var start = new NFA.Node();
-        var end = new NFA.Node(true);
+        var start = new Node();
+        var end = new Node(true);
 
         start.AddEmptyTransition(leftNFA.Start);
         start.AddEmptyTransition(rightNFA.Start);
@@ -71,7 +72,7 @@ public class AlternationNode : Node
         return leftNFA;
     }
 
-    public override bool Equals(Node? other)
+    public override bool Equals(RegexNode? other)
     {
         if (other != null && other is AlternationNode alternation)
             return Left != null && alternation.Left != null && Left.Equals(alternation.Left) &&

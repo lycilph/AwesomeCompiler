@@ -12,7 +12,7 @@ public class RegexParser
         _pattern = pattern;
     }
 
-    public Node Parse()
+    public RegexNode Parse()
     {
         current = 0;
         return ParseSequence();
@@ -53,9 +53,9 @@ public class RegexParser
         return sequence;
     }
 
-    private Node? ParseNode()
+    private RegexNode? ParseNode()
     {
-        Node? node = null;
+        RegexNode? node = null;
 
         var c = _pattern[current];
         switch (c)

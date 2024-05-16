@@ -5,7 +5,7 @@ namespace Core.RegularExpressions;
 public class Regex
 {
     private readonly string _pattern;
-    private readonly Node _root;
+    private readonly RegexNode _root;
 
     public Regex(string pattern)
     {
@@ -22,7 +22,7 @@ public class Regex
 
     public Graph ConvertToNFA() => _root.ConvertToNFA();
 
-    public Node GetRoot() => _root;
+    public RegexNode GetRoot() => _root;
 
     public static bool IsMatch(string input, string pattern) 
     {

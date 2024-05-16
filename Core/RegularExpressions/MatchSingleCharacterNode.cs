@@ -1,10 +1,11 @@
-﻿using Core.RegularExpressions.Algorithms;
+﻿using Core.NFA;
+using Core.RegularExpressions.Algorithms;
 using System.Diagnostics;
 
 namespace Core.RegularExpressions;
 
 [DebuggerDisplay("Single character node [{_value}]")]
-public class MatchSingleCharacterNode : Node
+public class MatchSingleCharacterNode : RegexNode
 {
     public char Value { get; private set; }
 
@@ -13,9 +14,9 @@ public class MatchSingleCharacterNode : Node
         Value = value;
     }
 
-    public override void ReplaceNode(Node oldNode, Node newNode)
+    public override void ReplaceNode(RegexNode oldNode, RegexNode newNode)
     {
-        throw new NotImplementedException();
+        throw new InvalidOperationException("A MatchSingleCharacterNode cannot replace a node");
     }
 
     public override void Accept(IVisitor visitor)
@@ -25,7 +26,7 @@ public class MatchSingleCharacterNode : Node
 
     public override bool IsMatch(List<char> input)
     {
-        if (input.Count > 0 && input.First() == Value) 
+        if (input.Count > 0 && input.First() == Value)
         {
             input.RemoveAt(0);
             return true;
@@ -33,19 +34,19 @@ public class MatchSingleCharacterNode : Node
         return false;
     }
 
-    public override NFA.Graph ConvertToNFA()
+    public override Graph ConvertToNFA()
     {
-        var graph = new NFA.Graph
+        var graph = new Graph
         {
-            Start = new NFA.Node(),
-            End = new NFA.Node(true)
+            Start = new Node(),
+            End = new Node(true)
         };
         graph.Start.AddTransition(graph.End, Value);
 
         return graph;
     }
 
-    public override bool Equals(Node? other)
+    public override bool Equals(RegexNode? other)
     {
         if (other != null && other is MatchSingleCharacterNode sc)
             return Value == sc.Value;

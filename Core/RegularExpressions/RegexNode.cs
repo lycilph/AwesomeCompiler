@@ -3,20 +3,20 @@ using Core.RegularExpressions.Algorithms;
 
 namespace Core.RegularExpressions;
 
-public abstract class Node : IEquatable<Node>
+public abstract class RegexNode : IEquatable<RegexNode>
 {
-    public Node? Parent { get; set; }
+    public RegexNode? Parent { get; set; }
 
-    public abstract void ReplaceNode(Node oldNode, Node newNode);
+    public abstract void ReplaceNode(RegexNode oldNode, RegexNode newNode);
 
     public abstract void Accept(IVisitor visitor);
     public abstract bool IsMatch(List<char> input);
     public abstract Graph ConvertToNFA();
 
-    public abstract bool Equals(Node? other);
+    public abstract bool Equals(RegexNode? other);
     public override bool Equals(object? obj)
     {
-        return Equals(obj as Node);
+        return Equals(obj as RegexNode);
     }
     public override int GetHashCode()
     {

@@ -12,6 +12,18 @@ public class ConversionToDFA
         var nfa = regex.ConvertToNFA();
 
         var sc = new SubsetConstruction();
-        var dfa = sc.Execute(nfa);
+        //var dfa = sc.Execute(nfa);
+        sc.Minimise(nfa);
+    }
+
+    [Fact]
+    public void Example2()
+    {
+        var regex = new Regex("[a-z]([a-z0-9_])+");
+        var nfa = regex.ConvertToNFA();
+
+        var sc = new SubsetConstruction();
+        //var dfa = sc.Execute(nfa);
+        sc.Minimise(nfa);
     }
 }

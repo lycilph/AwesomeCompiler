@@ -6,14 +6,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.TextFormatting;
 
 namespace AwesomeCompilerIDE;
 
 public partial class MainWindow : Window
 {
     private string pattern = string.Empty;
-    private Node? root;
+    private RegexNode? root;
 
     public MainWindow()
     {
@@ -115,7 +114,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private void ConvertToTreeview(Core.RegularExpressions.Node node, TreeViewItem? current)
+    private void ConvertToTreeview(Core.RegularExpressions.RegexNode node, TreeViewItem? current)
     {
         TreeViewItem item;
         switch (node)

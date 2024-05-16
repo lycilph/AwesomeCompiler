@@ -2,7 +2,42 @@
 
 public class SubsetConstruction
 {
-    public Graph Execute(Graph nfa)
+    public void Minimise(Graph nfa)
+    {
+        // Find input language symbols (the match all is implicitly included further on)
+        var symbols = FindSymbols(nfa.Start);
+
+        // Construct states
+        // Mark final states
+    }
+
+    public HashSet<char> FindSymbols(Node node)
+    {
+        var symbols = new HashSet<char>();
+        var visited = new HashSet<Node>();
+        var toVisit = new Stack<Node>();
+
+        // Initialize stack
+        toVisit.Push(node);
+
+        while (toVisit.Count > 0)
+        {
+            var n = toVisit.Pop();
+            visited.Add(n);
+
+            foreach (var t in n.Transitions)
+            {
+                if (t.Chars.Count > 0)
+                    symbols.UnionWith(t.Chars);
+                if (!visited.Contains(t.To))
+                    toVisit.Push(t.To);
+            }
+        }
+
+        return symbols;
+    }
+
+    public State Execute(Graph nfa)
     {
         var knownStates = new Dictionary<HashSet<Node>, State>(HashSet<Node>.CreateSetComparer());
         var visited = new HashSet<State>(new StateComparer());
@@ -42,7 +77,7 @@ public class SubsetConstruction
 
         // Find final (or accepting) states (ie. all states that contains a final node)
 
-        return new Graph();
+        return start;
     }
 
     private State Move(State s, char c)
