@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Core.NFA.Algorithms;
 
@@ -10,10 +9,11 @@ public class SymbolComparer : IEqualityComparer<Symbol>
 
     public bool Equals(Symbol? x, Symbol? y)
     {
-        return x != null && y != null &&
+        var result = x != null && y != null &&
             ((x.isEpsilon && y.isEpsilon) ||
              (x.isAny && y.isAny) ||
              x.chars.SetEquals(y.chars));
+        return result;
     }
 
     public int GetHashCode([DisallowNull] Symbol obj)

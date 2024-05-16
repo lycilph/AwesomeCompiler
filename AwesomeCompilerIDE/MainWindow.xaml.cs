@@ -1,4 +1,5 @@
-﻿using Core.NFA.Algorithms;
+﻿using Core.NFA;
+using Core.NFA.Algorithms;
 using Core.RegularExpressions;
 using Core.RegularExpressions.Algorithms;
 using System.Diagnostics;
@@ -12,8 +13,12 @@ namespace AwesomeCompilerIDE;
 
 public partial class MainWindow : Window
 {
+    private const string dotInput = "graph.txt";
+    private const string dotOutput = "graph.png";
+
     private string pattern = string.Empty;
     private RegexNode? root;
+    private Graph? nfa;
 
     public MainWindow()
     {
@@ -58,52 +63,68 @@ public partial class MainWindow : Window
         {
             try
             {
-                var dotInput = "graph.txt";
-                var dotOutput = "graph.png";
-
-                var graph = root.ConvertToNFA();
-                var dotGraph = DotGraphGenerator.Generate(graph.Start);
+                nfa = root.ConvertToNFA();
+                var dotGraph = DotGraphGenerator.Generate(nfa.Start);
                 File.WriteAllText(dotInput, dotGraph);
 
-                var process = new Process();
-                var startInfo = new ProcessStartInfo
-                {
-                    FileName = "dot.exe",
-                    Arguments = $"{dotInput} -Tpng -o{dotOutput}",
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                };
-
-                process.StartInfo = startInfo;
-                process.Start();
-
-                Debug.WriteLine("std out: " + process.StandardOutput.ReadToEnd());
-                Debug.WriteLine("std err: " + process.StandardError.ReadToEnd());
-
-                process.WaitForExit();
-
-                // Image must be loaded through a stream, so that it does not lock the file
-                var path = Path.GetFullPath(dotOutput);
-                var bitmap = new BitmapImage();
-                var stream = File.OpenRead(path);
-
-                bitmap.BeginInit();
-                bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                bitmap.StreamSource = stream;
-                bitmap.EndInit();
-                bitmap.Freeze();
-                stream.Close();
-                stream.Dispose();
-
-                image.Source = bitmap;
+                GenerateDotGraph();
             }
             catch (NotImplementedException ex)
             {
                 Debug.WriteLine(ex.Message);
             }
         }
+    }
+
+
+    private void ConvertToDFAButtonClick(object sender, RoutedEventArgs e)
+    {
+        if (nfa != null)
+        {
+            var sc = new SubsetConstruction();
+            var dfa = sc.Execute(nfa);
+            var dotGraph = DotGraphGenerator.Generate(dfa);
+            File.WriteAllText(dotInput, dotGraph);
+
+            GenerateDotGraph();
+        }
+    }
+
+    private void GenerateDotGraph()
+    {
+        var process = new Process();
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = "dot.exe",
+            Arguments = $"{dotInput} -Tpng -o{dotOutput}",
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+
+        process.StartInfo = startInfo;
+        process.Start();
+
+        Debug.WriteLine("std out: " + process.StandardOutput.ReadToEnd());
+        Debug.WriteLine("std err: " + process.StandardError.ReadToEnd());
+
+        process.WaitForExit();
+
+        // Image must be loaded through a stream, so that it does not lock the file
+        var path = Path.GetFullPath(dotOutput);
+        var bitmap = new BitmapImage();
+        var stream = File.OpenRead(path);
+
+        bitmap.BeginInit();
+        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+        bitmap.StreamSource = stream;
+        bitmap.EndInit();
+        bitmap.Freeze();
+        stream.Close();
+        stream.Dispose();
+
+        image.Source = bitmap;
     }
 
     private void ConvertToTreeview()
@@ -195,6 +216,12 @@ public partial class MainWindow : Window
         textbox.Document.Blocks.Add(new Paragraph(new Run("(a|b)*abb")));
     }
 
+    private void Exp4ButtonClick(object sender, RoutedEventArgs e)
+    {
+        textbox.Document.Blocks.Clear();
+        textbox.Document.Blocks.Add(new Paragraph(new Run("[a-z]([a-z]|[0-9]|_)*")));
+    }
+    
     private void ClearButtonClick(object sender, RoutedEventArgs e)
     {
         textbox.Document.Blocks.Clear();

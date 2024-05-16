@@ -13,6 +13,7 @@
         </Grid.ColumnDefinitions>
 
         <DockPanel>
+            <Button DockPanel.Dock="Bottom" Click="ConvertToDFAButtonClick" Margin="0 5 0 0">Convert to DFA</Button>
             <Button DockPanel.Dock="Bottom" Click="ConvertToNFAButtonClick" Margin="0 5 0 0">Convert to NFA</Button>
             <Button DockPanel.Dock="Bottom" Click="SimplifyButtonClick" Margin="0 5 0 0">Simplify</Button>
             <Button DockPanel.Dock="Bottom" Click="ParseButtonClick">Parse</Button>
@@ -22,6 +23,7 @@
                     <Button Click="Exp1ButtonClick">Exp1</Button>
                     <Button Click="Exp2ButtonClick">Exp2</Button>
                     <Button Click="Exp3ButtonClick">Exp3</Button>
+                    <Button Click="Exp4ButtonClick">Exp4</Button>
                     <Button Click="ClearButtonClick">Clear</Button>
                 </StackPanel>
                 
