@@ -1,11 +1,12 @@
 ﻿using Core.NFA.Algorithms;
 using Core.RegularExpressions;
 
-namespace AwesomeCompiler;
+namespace UnitTests;
 
-internal class Program
+public class MinimizeDFATests
 {
-    static void Main()
+    [Fact]
+    public void MinimizeDFAExample1()
     {
         var regex = new Regex("(a|b)*abb");
         var nfa = regex.ConvertToNFA();
@@ -14,8 +15,5 @@ internal class Program
 
         var minimizer = new StateMinimization();
         minimizer.Execute(node);
-
-        //Console.Write("Press any key to continue...");
-        //Console.ReadKey();
     }
 }

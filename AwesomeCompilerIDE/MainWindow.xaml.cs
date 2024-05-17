@@ -19,6 +19,7 @@ public partial class MainWindow : Window
     private string pattern = string.Empty;
     private RegexNode? root;
     private Graph? nfa;
+    private Node? dfa;
 
     public MainWindow()
     {
@@ -76,13 +77,25 @@ public partial class MainWindow : Window
         }
     }
 
-
     private void ConvertToDFAButtonClick(object sender, RoutedEventArgs e)
     {
         if (nfa != null)
         {
             var sc = new SubsetConstruction();
-            var dfa = sc.Execute(nfa);
+            dfa = sc.Execute(nfa);
+            var dotGraph = DotGraphGenerator.Generate(dfa);
+            File.WriteAllText(dotInput, dotGraph);
+
+            GenerateDotGraph();
+        }
+    }
+
+    private void MinimizeDFAButtonClick(object sender, RoutedEventArgs e)
+    {
+        if (dfa != null)
+        {
+            var minimizer = new StateMinimization();
+            dfa = minimizer.Execute(dfa);
             var dotGraph = DotGraphGenerator.Generate(dfa);
             File.WriteAllText(dotInput, dotGraph);
 

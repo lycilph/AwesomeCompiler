@@ -13,6 +13,7 @@
         </Grid.ColumnDefinitions>
 
         <DockPanel>
+            <Button DockPanel.Dock="Bottom" Click="MinimizeDFAButtonClick" Margin="0 5 0 0">Minimize DFA</Button>
             <Button DockPanel.Dock="Bottom" Click="ConvertToDFAButtonClick" Margin="0 5 0 0">Convert to DFA</Button>
             <Button DockPanel.Dock="Bottom" Click="ConvertToNFAButtonClick" Margin="0 5 0 0">Convert to NFA</Button>
             <Button DockPanel.Dock="Bottom" Click="SimplifyButtonClick" Margin="0 5 0 0">Simplify</Button>
