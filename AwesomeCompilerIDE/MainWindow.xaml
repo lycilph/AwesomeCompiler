@@ -24,6 +24,7 @@
                     <Button Click="Exp2ButtonClick">Exp2</Button>
                     <Button Click="Exp3ButtonClick">Exp3</Button>
                     <Button Click="Exp4ButtonClick">Exp4</Button>
+                    <Button Click="Exp5ButtonClick">Exp5</Button>
                     <Button Click="ClearButtonClick">Clear</Button>
                 </StackPanel>
                 

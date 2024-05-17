@@ -174,7 +174,7 @@ public partial class MainWindow : Window
                 ConvertToTreeview(star.Child!, item);
                 break;
             case CharacterSetNode set:
-                item = new TreeViewItem() { Header = $"Character set [{(set.IsNegativeSet?"^ ":"")}{set.Label}] {set.Count()} characters", IsExpanded = true };
+                item = new TreeViewItem() { Header = $"Character set [{set.Label}] {set.Count()} characters", IsExpanded = true };
                 AddItem(current, item);
                 break;
             case MatchSingleCharacterNode matchSingleCharacter:
@@ -221,7 +221,13 @@ public partial class MainWindow : Window
         textbox.Document.Blocks.Clear();
         textbox.Document.Blocks.Add(new Paragraph(new Run("[a-z]([a-z]|[0-9]|_)*")));
     }
-    
+
+    private void Exp5ButtonClick(object sender, RoutedEventArgs e)
+    {
+        textbox.Document.Blocks.Clear();
+        textbox.Document.Blocks.Add(new Paragraph(new Run("[a-z]([^0-9])*")));
+    }
+
     private void ClearButtonClick(object sender, RoutedEventArgs e)
     {
         textbox.Document.Blocks.Clear();

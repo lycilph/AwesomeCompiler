@@ -35,7 +35,7 @@ public class CharacterSetNode : RegexNode
     {
         for (char c = start; c <= end; c++)
             _chars.Add(c);
-        Label += $"{start}-{end}";
+        Label += $"{(IsNegativeSet?"^":"")}{start}-{end}";
     }
 
     public void AddCharacter(char c)
