@@ -9,6 +9,6 @@ public class Symbol
 
     public override string ToString()
     {
-        return label;
+        return label == "\"" ? "\\\"" : label;
     }
 }
