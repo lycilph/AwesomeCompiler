@@ -1,148 +1,112 @@
-﻿using System.Diagnostics;
-
-namespace Core.RegularExpressions;
+﻿namespace Core.RegularExpressions;
 
 public class RegexParser
 {
-    private readonly string _pattern;
-    private int current = 0;
+    private readonly List<RegexToken> _tokens;
+    private int _position;
 
-    public RegexParser(string pattern)
+    public RegexParser(List<RegexToken> tokens)
     {
-        _pattern = pattern;
+        _tokens = tokens;
+        _position = 0;
+    }
+
+    private void Advance() => _position++;
+    private RegexToken Current => _tokens[_position];
+
+    private void Match(RegexTokenType type)
+    {
+        if (Current.Type != type)
+            throw new InvalidDataException($"Expected {type} but got {Current.Type}");
+        Advance();
     }
 
     public RegexNode Parse()
     {
-        current = 0;
-        return ParseSequence();
+        return ParseAlternation();
     }
 
-    private SequenceNode ParseSequence()
+    private RegexNode ParseAlternation()
     {
-        var sequence = new SequenceNode();
-        while (current < _pattern.Length)
-        {
-            var node = ParseNode();
-            if (node == null)
-                return sequence;
+        var node = ParseConcatenation();
 
-            switch (node)
-            {
-                case AlternationNode alternation:
-                    alternation.Left = sequence.Last();
-                    sequence.ReplaceLast(alternation);
-                    break;
-                case StarNode star:
-                    star.Child = sequence.Last();
-                    sequence.ReplaceLast(star);
-                    break;
-                case PlusNode plus:
-                    plus.Child = sequence.Last();
-                    sequence.ReplaceLast(plus);
-                    break;
-                case OptionalNode optional:
-                    optional.Child = sequence.Last();
-                    sequence.ReplaceLast(optional);
-                    break;
-                default:
-                    sequence.Add(node);
-                    break;
-            }
+        while (Current.Type == RegexTokenType.Alternation)
+        {
+            Advance();
+            var right = ParseConcatenation();
+            node = new AlternationNode(node, right);
         }
-        return sequence;
+
+        return node;
     }
 
-    private RegexNode? ParseNode()
+    private RegexNode ParseConcatenation()
     {
-        RegexNode? node = null;
+        var node = ParseStar();
 
-        var c = _pattern[current];
-        switch (c)
+        while (Current.Type == RegexTokenType.Character || Current.Type == RegexTokenType.LeftParenthesis)
         {
-            case '[':
-                var end = _pattern.IndexOf(']', current);
-                if (end == -1)
-                    Debug.WriteLine("Unmatched ] found");
+            var right = ParseStar();
+            node = new ConcatenationNode(node, right);
+        }
 
-                node = ParseCharacterSet(_pattern.Substring(current + 1, end - current - 1));
-                current = end + 1;
-                break;
-            case '(':
-                current++;
-                node = new GroupNode(ParseSequence());
-                break;
-            case ')':
-                current++;
-                break;
-            case '|':
-                current++;
-                var next_node = ParseNode();
-                node = new AlternationNode() { Right = next_node };
-                break;
-            case '*':
-                node = new StarNode();
-                current++;
-                break;
-            case '+':
-                node = new PlusNode();
-                current++;
-                break;
-            case '?':
-                node = new OptionalNode();
-                current++;
-                break;
-            case '.':
-                node = new MatchAnyCharacterNode();
-                current++;
-                break;
-            case '\\':
-                node = new MatchSingleCharacterNode(Peek());
-                current += 2;
-                break;
+        return node;
+    }
+
+    private RegexNode ParseStar()
+    {
+        var node = ParsePlus();
+
+        while (Current.Type == RegexTokenType.Star)
+        {
+            Advance();
+            node = new StarNode(node);
+        }
+
+        return node;
+    }
+
+    private RegexNode ParsePlus()
+    {
+        var node = ParseOptional();
+
+        while (Current.Type == RegexTokenType.Plus)
+        {
+            Advance();
+            node = new PlusNode(node);
+        }
+
+        return node;
+    }
+
+    private RegexNode ParseOptional()
+    {
+        var node = ParsePrimary();
+
+        while (Current.Type == RegexTokenType.Optional)
+        {
+            Advance();
+            node = new OptionalNode(node);
+        }
+
+        return node;
+    }
+
+    private RegexNode ParsePrimary()
+    {
+        switch (Current.Type) 
+        {
+            case RegexTokenType.Character:
+                var charNode = new CharacterNode(Current.Value!.Value);
+                Advance();
+                return charNode;
+            case RegexTokenType.LeftParenthesis:
+                Advance();
+                var node = ParseAlternation();
+                Match(RegexTokenType.RightParenthesis);
+                return node;
             default:
-                node = new MatchSingleCharacterNode(c);
-                current++;
-                break;
+                throw new InvalidDataException($"Unknown token {Current.Type}");
         }
-
-        return node;
     }
-
-    private CharacterSetNode ParseCharacterSet(string setPattern)
-    {
-        var node = new CharacterSetNode();
-        var setCurrent = 0;
-
-        if (setPattern[setCurrent] == '^')
-        {
-            node.IsNegativeSet = true;
-            setCurrent++;
-        }
-
-        char c = ' ';
-        char c2 = ' ';
-        while (setCurrent < setPattern.Length) 
-        {
-            c = setPattern[setCurrent];
-
-            // Are we parsing a range
-            if (setCurrent < setPattern.Length-1 && setPattern[setCurrent+1] == '-')
-            { 
-                c2 = setPattern[setCurrent+2];
-                node.AddRange(c, c2);
-                setCurrent += 3;
-            }
-            // Or is this just a single character
-            else 
-            {
-                node.AddCharacter(c);
-                setCurrent++;
-            }
-        }
-
-        return node;
-    }
-
-    private char Peek() => _pattern[current + 1];
 }
