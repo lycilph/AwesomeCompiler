@@ -8,9 +8,11 @@ public abstract class RegexNode
     private static int counter = 0;
     public static void ResetCounter() => counter = 0;
     
+    public RegexNode? Parent { get; set; }
     public int Id { get; } = counter++;
     public abstract void Accept(IVisitor visitor);
     public abstract R Accept<R>(IVisitor<R> visitor);
+    public abstract void Replace(RegexNode oldNode, RegexNode newNode);
 }
 
 [DebuggerDisplay("Any Character node [.]")]
@@ -18,6 +20,7 @@ public class AnyCharacterNode : RegexNode, IEquatable<AnyCharacterNode>
 {
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
+    public override void Replace(RegexNode oldNode, RegexNode newNode) { }
     public bool Equals(AnyCharacterNode? other)
     {
         if (other is null)
@@ -38,7 +41,7 @@ public class AnyCharacterNode : RegexNode, IEquatable<AnyCharacterNode>
     }
 }
 
-[DebuggerDisplay("Character node [{Value}]")]
+[DebuggerDisplay("Character node [{ToString()}]")]
 public class CharacterNode(char value) : RegexNode, IEquatable<CharacterNode>
 {
     public char Value { get; } = value;
@@ -54,6 +57,7 @@ public class CharacterNode(char value) : RegexNode, IEquatable<CharacterNode>
     }
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
+    public override void Replace(RegexNode oldNode, RegexNode newNode) { }
     public bool Equals(CharacterNode? other)
     {
         if (other is null)
@@ -101,6 +105,7 @@ public class CharacterSetNode : RegexNode, IEquatable<CharacterSetNode>
 
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
+    public override void Replace(RegexNode oldNode, RegexNode newNode) { }
     public bool Equals(CharacterSetNode? other)
     {
         if (other is null)
@@ -181,12 +186,23 @@ public class RangeCharacterSetElement(char start, char end) : CharacterSetNodeEl
 }
 
 [DebuggerDisplay("Alternation node [|]")]
-public class AlternationNode(RegexNode left, RegexNode right) : RegexNode, IEquatable<AlternationNode>
+public class AlternationNode : RegexNode, IEquatable<AlternationNode>
 {
-    public RegexNode Left { get; } = left;
-    public RegexNode Right { get; } = right;
+    public RegexNode Left { get; }
+    public RegexNode Right { get; }
+
+    public AlternationNode(RegexNode left, RegexNode right)
+    {
+        Left = left;
+        Left.Parent = this;
+
+        Right = right;
+        Right.Parent = this;
+    }
+
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
+    public override void Replace(RegexNode oldNode, RegexNode newNode) { }
     public bool Equals(AlternationNode? other)
     {
         if (other is null)
@@ -212,12 +228,23 @@ public class AlternationNode(RegexNode left, RegexNode right) : RegexNode, IEqua
 }
 
 [DebuggerDisplay("Concatetion node [.]")]
-public class ConcatenationNode(RegexNode left, RegexNode right) : RegexNode, IEquatable<ConcatenationNode>
+public class ConcatenationNode : RegexNode, IEquatable<ConcatenationNode>
 {
-    public RegexNode Left { get; } = left;
-    public RegexNode Right { get; } = right;
+    public RegexNode Left { get; }
+    public RegexNode Right { get; }
+
+    public ConcatenationNode(RegexNode left, RegexNode right)
+    {
+        Left = left;
+        Left.Parent = this;
+
+        Right = right;
+        Right.Parent = this;
+    }
+
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
+    public override void Replace(RegexNode oldNode, RegexNode newNode) { }
     public bool Equals(ConcatenationNode? other)
     {
         if (other is null)
@@ -243,11 +270,19 @@ public class ConcatenationNode(RegexNode left, RegexNode right) : RegexNode, IEq
 }
 
 [DebuggerDisplay("Star node [*]")]
-public class StarNode(RegexNode child) : RegexNode, IEquatable<StarNode>
+public class StarNode : RegexNode, IEquatable<StarNode>
 {
-    public RegexNode Child { get; } = child;
+    public RegexNode Child { get; }
+
+    public StarNode(RegexNode child)
+    {
+        Child = child;
+        Child.Parent = this;
+    }
+
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
+    public override void Replace(RegexNode oldNode, RegexNode newNode) { }
     public bool Equals(StarNode? other)
     {
         if (other is null)
@@ -271,11 +306,19 @@ public class StarNode(RegexNode child) : RegexNode, IEquatable<StarNode>
 }
 
 [DebuggerDisplay("Plus node [+]")]
-public class PlusNode(RegexNode child) : RegexNode, IEquatable<PlusNode>
+public class PlusNode : RegexNode, IEquatable<PlusNode>
 {
-    public RegexNode Child { get; } = child;
+    public RegexNode Child { get; }
+
+    public PlusNode(RegexNode child)
+    {
+        Child = child;
+        Child.Parent = this;
+    }
+
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
+    public override void Replace(RegexNode oldNode, RegexNode newNode) { }
     public bool Equals(PlusNode? other)
     {
         if (other is null)
@@ -299,11 +342,19 @@ public class PlusNode(RegexNode child) : RegexNode, IEquatable<PlusNode>
 }
 
 [DebuggerDisplay("Optional node [?]")]
-public class OptionalNode(RegexNode child) : RegexNode, IEquatable<OptionalNode>
+public class OptionalNode : RegexNode, IEquatable<OptionalNode>
 {
-    public RegexNode Child { get; } = child;
+    public RegexNode Child { get; }
+
+    public OptionalNode(RegexNode child)
+    {
+        Child = child;
+        Child.Parent = this;
+    }
+
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
+    public override void Replace(RegexNode oldNode, RegexNode newNode) { }
     public bool Equals(OptionalNode? other)
     {
         if (other is null)

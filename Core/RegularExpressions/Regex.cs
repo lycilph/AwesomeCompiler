@@ -1,6 +1,8 @@
-﻿namespace Core.RegularExpressions;
+﻿using Core.RegularExpressions.Algorithms;
 
-public class Regex
+namespace Core.RegularExpressions;
+
+public class Regex : RegexNode
 {
     private readonly string _pattern;
 
@@ -11,14 +13,30 @@ public class Regex
         _pattern = pattern;
 
         // Reset regex node counter
-        RegexNode.ResetCounter();
+        ResetCounter();
 
         // Tokenize string
         var tokens = RegexTokenizer.Tokenize(_pattern);
 
         // Parse tokens
         Node = RegexParser.Parse(tokens);
+        Node.Parent = this;
+    }
 
-        // Simplify tree
+    public override void Accept(IVisitor visitor)
+    {
+        throw new InvalidOperationException();
+    }
+
+    public override R Accept<R>(IVisitor<R> visitor)
+    {
+        throw new InvalidOperationException();
+    }
+
+    public override void Replace(RegexNode oldNode, RegexNode newNode)
+    {
+        if (Node == oldNode)
+            Node = newNode;
+        Node.Parent = this;
     }
 }

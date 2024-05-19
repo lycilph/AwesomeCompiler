@@ -4,7 +4,7 @@ public class PrintAstVisitor : IVisitor
 {
     private int indent = 0;
 
-    private string Get(RegexNode node) => new string(' ', indent) + node.GetType().Name + $" (id: {node.Id})";
+    private string Get(RegexNode node) => new string(' ', indent) + node.GetType().Name + $" (id: {node.Id}, parent id: {node.Parent?.Id})";
 
     public void Visit(AnyCharacterNode node)
     {

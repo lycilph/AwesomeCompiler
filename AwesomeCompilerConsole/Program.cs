@@ -1,5 +1,4 @@
-﻿using Core;
-using Core.RegularExpressions;
+﻿using Core.RegularExpressions;
 using Core.RegularExpressions.Algorithms;
 
 namespace AwesomeCompilerConsole;
@@ -10,22 +9,33 @@ internal class Program
     {
         try
         {
-            var str = @"[0-9](.[0-9]+)?";
+            var str = @"[a-z]|[0-9]";
             Console.WriteLine($"Input {str}");
+            Console.WriteLine();
             
             var tokenizer = new RegexTokenizer(str);
             var tokens = tokenizer.Tokenize();
+            Console.WriteLine("Tokens found:");
             tokens.ForEach(Console.WriteLine);
+            Console.WriteLine();
 
             var parser = new RegexParser(tokens);
             var node = parser.Parse();
             var printVisitor = new PrintAstVisitor();
+            Console.WriteLine("AST");
             node.Accept(printVisitor);
+            Console.WriteLine();
 
-            var dotGraph = DotGraphVisitor.Generate(node);
-            Console.WriteLine(dotGraph);
+            var simplifier = new SimplifyVisitor();
+            node.Accept(simplifier);
+            Console.WriteLine("Simplifed AST");
+            node.Accept(printVisitor);
+            Console.WriteLine();
 
-            DotWrapper.Render("graph.png", dotGraph);
+            //var dotGraph = DotGraphVisitor.Generate(node);
+            //Console.WriteLine(dotGraph);
+
+            //DotWrapper.Render("graph.png", dotGraph);
         }
         catch (Exception ex)
         {
