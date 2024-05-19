@@ -1,4 +1,5 @@
-﻿using Core.RegularExpressions;
+﻿using Core;
+using Core.RegularExpressions;
 using Core.RegularExpressions.Algorithms;
 
 namespace AwesomeCompilerConsole;
@@ -9,7 +10,7 @@ internal class Program
     {
         try
         {
-            var str = "(a|b)*ab?b+";
+            var str = "(a|b)*ab+b?";
             Console.WriteLine($"Input {str}");
             
             var tokenizer = new RegexTokenizer(str);
@@ -20,6 +21,11 @@ internal class Program
             var node = parser.Parse();
             var printVisitor = new PrintAstVisitor();
             node.Accept(printVisitor);
+
+            var dotGraph = DotGraphVisitor.Generate(node);
+            Console.WriteLine(dotGraph);
+
+            DotWrapper.Render("graph.png", dotGraph);
         }
         catch (Exception ex)
         {

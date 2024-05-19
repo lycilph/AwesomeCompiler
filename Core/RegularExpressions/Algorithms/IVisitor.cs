@@ -9,3 +9,13 @@ public interface IVisitor
     void Visit(PlusNode node);
     void Visit(OptionalNode node);
 }
+
+public interface IVisitor<R>
+{
+    R Visit(CharacterNode node);
+    R Visit(AlternationNode node);
+    R Visit(ConcatenationNode node);
+    R Visit(StarNode node);
+    R Visit(PlusNode node);
+    R Visit(OptionalNode node);
+}

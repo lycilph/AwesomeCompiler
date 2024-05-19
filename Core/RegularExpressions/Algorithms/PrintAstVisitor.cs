@@ -4,16 +4,16 @@ public class PrintAstVisitor : IVisitor
 {
     private int indent = 0;
 
-    private string Str() => new(' ', indent);
+    private string Get(RegexNode node) => new string(' ', indent) + node.GetType().Name + $" (id: {node.Id})";
 
     public void Visit(CharacterNode node)
     {
-        Console.WriteLine($"{Str()}{node.GetType().Name} - {node.Value}");
+        Console.WriteLine(Get(node)+$" - {node.Value}");
     }
 
     public void Visit(AlternationNode node)
     {
-        Console.WriteLine($"{Str()}{node.GetType().Name}");
+        Console.WriteLine(Get(node));
         indent += 2;
         node.Left.Accept(this);
         node.Right.Accept(this);
@@ -22,7 +22,7 @@ public class PrintAstVisitor : IVisitor
 
     public void Visit(ConcatenationNode node)
     {
-        Console.WriteLine($"{Str()}{node.GetType().Name}");
+        Console.WriteLine(Get(node));
         indent += 2;
         node.Left.Accept(this);
         node.Right.Accept(this);
@@ -31,7 +31,7 @@ public class PrintAstVisitor : IVisitor
 
     public void Visit(StarNode node)
     {
-        Console.WriteLine($"{Str()}{node.GetType().Name}");
+        Console.WriteLine(Get(node));
         indent += 2;
         node.Child.Accept(this);
         indent -= 2;
@@ -39,7 +39,7 @@ public class PrintAstVisitor : IVisitor
 
     public void Visit(PlusNode node)
     {
-        Console.WriteLine($"{Str()}{node.GetType().Name}");
+        Console.WriteLine(Get(node));
         indent += 2;
         node.Child.Accept(this);
         indent -= 2;
@@ -47,7 +47,7 @@ public class PrintAstVisitor : IVisitor
 
     public void Visit(OptionalNode node)
     {
-        Console.WriteLine($"{Str()}{node.GetType().Name}");
+        Console.WriteLine(Get(node));
         indent += 2;
         node.Child.Accept(this);
         indent -= 2;
