@@ -47,7 +47,8 @@ public class RegexParser
     {
         var node = ParseStar();
 
-        while (Current.Type == RegexTokenType.Character || 
+        while (Current.Type == RegexTokenType.Character ||
+               Current.Type == RegexTokenType.Any ||
                Current.Type == RegexTokenType.LeftParenthesis || 
                Current.Type == RegexTokenType.LeftBracket)
         {
@@ -105,6 +106,10 @@ public class RegexParser
                 var charNode = new CharacterNode(Current.Value!.Value);
                 Advance();
                 return charNode;
+            case RegexTokenType.Any:
+                var anyNode = new AnyCharacterNode();
+                Advance();
+                return anyNode;
             case RegexTokenType.LeftParenthesis:
                 Advance();
                 var node = ParseAlternation();

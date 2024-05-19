@@ -6,6 +6,11 @@ public class PrintAstVisitor : IVisitor
 
     private string Get(RegexNode node) => new string(' ', indent) + node.GetType().Name + $" (id: {node.Id})";
 
+    public void Visit(AnyCharacterNode node)
+    {
+        Console.WriteLine(Get(node));
+    }
+
     public void Visit(CharacterNode node)
     {
         Console.WriteLine(Get(node)+$" - {node}");

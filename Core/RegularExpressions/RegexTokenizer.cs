@@ -63,6 +63,10 @@ public class RegexTokenizer
                     tokens.Add(new RegexToken(RegexTokenType.Optional));
                     Advance();
                     break;
+                case '.':
+                    tokens.Add(new RegexToken(RegexTokenType.Any));
+                    Advance();
+                    break;
                 case '\\':
                     tokens.Add(HandleEscapeCharacter());
                     break;

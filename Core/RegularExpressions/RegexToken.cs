@@ -12,6 +12,7 @@ public enum RegexTokenType
     Star,             // *
     Plus,             // +
     Optional,         // ?
+    Any,              // .
     Character,        // Anything else
     EndOfInput
 }

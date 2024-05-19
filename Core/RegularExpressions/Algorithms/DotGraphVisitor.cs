@@ -25,6 +25,12 @@ public class DotGraphVisitor : IVisitor<int>
         sb.AppendLine("}");
     }
 
+    public int Visit(AnyCharacterNode node)
+    {
+        sb.AppendLine($"  {node.Id} [shape=ellipse ,label=\"Any\"]");
+        return node.Id;
+    }
+
     public int Visit(CharacterNode node)
     {
         sb.AppendLine($"  {node.Id} [shape=circle,label=\"{node}\"]");
@@ -51,7 +57,7 @@ public class DotGraphVisitor : IVisitor<int>
     {
         var leftId = node.Left.Accept(this);
         var rightId = node.Right.Accept(this);
-        sb.AppendLine($"  {node.Id} [shape=circle,label=\".\"]");
+        sb.AppendLine($"  {node.Id} [shape=ellipse,label=\"Concatenation\"]");
         sb.AppendLine($"  {node.Id} -> {leftId}");
         sb.AppendLine($"  {node.Id} -> {rightId}");
         return node.Id;

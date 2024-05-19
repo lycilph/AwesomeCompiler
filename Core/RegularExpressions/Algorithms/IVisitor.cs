@@ -2,6 +2,7 @@
 
 public interface IVisitor
 {
+    void Visit(AnyCharacterNode node);
     void Visit(CharacterNode node);
     void Visit(CharacterSetNode node);
     void Visit(AlternationNode node);
@@ -13,6 +14,7 @@ public interface IVisitor
 
 public interface IVisitor<R>
 {
+    R Visit(AnyCharacterNode node);
     R Visit(CharacterNode node);
     R Visit(CharacterSetNode node);
     R Visit(AlternationNode node);

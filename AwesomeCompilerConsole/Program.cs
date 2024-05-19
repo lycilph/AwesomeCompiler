@@ -10,7 +10,7 @@ internal class Program
     {
         try
         {
-            var str = @"[\(-\)]";
+            var str = @"[0-9](.[0-9]+)?";
             Console.WriteLine($"Input {str}");
             
             var tokenizer = new RegexTokenizer(str);
