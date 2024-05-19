@@ -10,7 +10,7 @@ internal class Program
     {
         try
         {
-            var str = "([a-zA-Z_]|[0-9])*ab[abc]";
+            var str = @"[\(-\)]";
             Console.WriteLine($"Input {str}");
             
             var tokenizer = new RegexTokenizer(str);

@@ -1,6 +1,5 @@
 ﻿using Core.RegularExpressions.Algorithms;
 using System.Diagnostics;
-using System.Xml.Linq;
 
 namespace Core.RegularExpressions;
 
@@ -18,6 +17,16 @@ public abstract class RegexNode
 public class CharacterNode(char value) : RegexNode, IEquatable<CharacterNode>
 {
     public char Value { get; } = value;
+    public override string ToString()
+    {
+        return Value switch
+        {
+            '\\' => @"\\",
+            '\n' => @"\\n",
+            '\r' => @"\\r",
+            _ => Value.ToString(),
+        };
+    }
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
     public bool Equals(CharacterNode? other)

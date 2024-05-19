@@ -8,7 +8,7 @@ public class PrintAstVisitor : IVisitor
 
     public void Visit(CharacterNode node)
     {
-        Console.WriteLine(Get(node)+$" - {node.Value}");
+        Console.WriteLine(Get(node)+$" - {node}");
     }
 
     public void Visit(CharacterSetNode node)

@@ -63,6 +63,9 @@ public class RegexTokenizer
                     tokens.Add(new RegexToken(RegexTokenType.Optional));
                     Advance();
                     break;
+                case '\\':
+                    tokens.Add(HandleEscapeCharacter());
+                    break;
                 default:
                     tokens.Add(new RegexToken(RegexTokenType.Character, current));
                     Advance();
@@ -73,6 +76,23 @@ public class RegexTokenizer
         tokens.Add(new RegexToken(RegexTokenType.EndOfInput));
 
         return tokens;
+    }
+
+    public RegexToken HandleEscapeCharacter()
+    {
+        Advance();
+        if (_position >= _input.Length)
+            throw new Exception("Incomplete escape sequence");
+
+        var current = _input[_position];
+        Advance();
+
+        return current switch
+        {
+            'r' => new RegexToken(RegexTokenType.Character, '\r'),
+            'n' => new RegexToken(RegexTokenType.Character, '\n'),
+            _ => new RegexToken(RegexTokenType.Character, current),
+        };
     }
 
     public static List<RegexToken> Tokenize(string input)

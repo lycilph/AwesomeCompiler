@@ -4,7 +4,7 @@ namespace Core.RegularExpressions.Algorithms;
 
 public class DotGraphVisitor : IVisitor<int>
 {
-    private StringBuilder sb = new StringBuilder();
+    private readonly StringBuilder sb = new();
 
     public static string Generate(RegexNode node)
     {
@@ -27,7 +27,7 @@ public class DotGraphVisitor : IVisitor<int>
 
     public int Visit(CharacterNode node)
     {
-        sb.AppendLine($"  {node.Id} [shape=circle,label=\"{node.Value}\"]");
+        sb.AppendLine($"  {node.Id} [shape=circle,label=\"{node}\"]");
         return node.Id;
     }
 
