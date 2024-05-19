@@ -74,4 +74,10 @@ public class RegexTokenizer
 
         return tokens;
     }
+
+    public static List<RegexToken> Tokenize(string input)
+    {
+        var tokenizer = new RegexTokenizer(input);
+        return tokenizer.Tokenize();
+    }
 }

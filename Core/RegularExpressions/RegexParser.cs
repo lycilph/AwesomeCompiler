@@ -143,14 +143,14 @@ public class RegexParser
         return node;
     }
 
-    private CharacterSetNodeElement ParseSingleElement()
+    private SingleCharacterSetElement ParseSingleElement()
     {
         var element = new SingleCharacterSetElement(Current.Value!.Value);
         Advance();
         return element;
     }
 
-    private CharacterSetNodeElement ParseRangeElement()
+    private RangeCharacterSetElement ParseRangeElement()
     {
         var start = Current.Value!.Value;
         Advance();
@@ -158,5 +158,11 @@ public class RegexParser
         var end = Current.Value!.Value;
         Advance();
         return new RangeCharacterSetElement(start, end);
+    }
+
+    public static RegexNode Parse(List<RegexToken> tokens)
+    {
+        var parser = new RegexParser(tokens);
+        return parser.Parse();
     }
 }
