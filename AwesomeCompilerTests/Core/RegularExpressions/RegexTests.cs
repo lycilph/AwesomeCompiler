@@ -2,16 +2,8 @@
 
 namespace AwesomeCompilerTests.Core.RegularExpressions;
 
-// All classes marked with the same collection are run sequentially
-// Currently needed, as nodes use a static counter to generate ids
-[Collection("Must run sequentially #1")]
 public class RegexTests
 {
-    public RegexTests()
-    {
-        RegexNode.ResetCounter();
-    }
-
     [Fact]
     public void ParseRegex1()
     {
@@ -33,7 +25,7 @@ public class RegexTests
         var regex = new Regex(input);
 
         // Assert
-        Assert.Equal(inputNode, regex.Node);
+        Assert.Equal(inputNode, regex.Node, new RegexNodeComparerIgnoreId());
     }
 
     [Fact]
@@ -59,7 +51,7 @@ public class RegexTests
         var regex = new Regex(input);
 
         // Assert
-        Assert.Equal(inputNode, regex.Node);
+        Assert.Equal(inputNode, regex.Node, new RegexNodeComparerIgnoreId());
     }
 
     [Fact]
@@ -82,7 +74,7 @@ public class RegexTests
         var regex = new Regex(input);
 
         // Assert
-        Assert.Equal(inputNode, regex.Node);
+        Assert.Equal(inputNode, regex.Node, new RegexNodeComparerIgnoreId());
     }
 
     [Fact]
@@ -103,6 +95,6 @@ public class RegexTests
         var regex = new Regex(input);
 
         // Assert
-        Assert.Equal(inputNode, regex.Node);
+        Assert.Equal(inputNode, regex.Node, new RegexNodeComparerIgnoreId());
     }
 }

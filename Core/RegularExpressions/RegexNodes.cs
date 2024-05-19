@@ -6,7 +6,6 @@ namespace Core.RegularExpressions;
 public abstract class RegexNode
 {
     private static int counter = 0;
-    public static void ResetCounter() => counter = 0;
     
     public RegexNode? Parent { get; set; }
     public int Id { get; } = counter++;
@@ -36,6 +35,7 @@ public class AnyCharacterNode : RegexNode, IEquatable<AnyCharacterNode>
     {
         // Combine hash codes of individual fields (from ChatGPT)
         int hash = 17;
+        hash = hash * 23 + Id.GetHashCode();
         hash = hash * 23 + ".".GetHashCode();
         return hash;
     }

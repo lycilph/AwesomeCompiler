@@ -3,9 +3,6 @@ using Core.RegularExpressions.Algorithms;
 
 namespace AwesomeCompilerTests.Core.RegularExpressions;
 
-// All classes marked with the same collection are run sequentially
-// Currently needed, as nodes use a static counter to generate ids
-[Collection("Must run sequentially #1")]
 public class SimplifyTests
 {
     [Fact]

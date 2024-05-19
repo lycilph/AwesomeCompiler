@@ -2,29 +2,19 @@
 
 namespace AwesomeCompilerTests.Core.RegularExpressions;
 
-// All classes marked with the same collection are run sequentially
-// Currently needed, as nodes use a static counter to generate ids
-[Collection("Must run sequentially #1")]
 public class NodesTests
 {
-    public NodesTests()
-    {
-        RegexNode.ResetCounter();
-    }
-
     [Fact]
     public void AnyCharacterNodeEqualityTest()
     {
         // Arrange
         var n1 = new AnyCharacterNode();
-
-        RegexNode.ResetCounter();
         var n2 = new AnyCharacterNode();
 
         // Act
 
         // Assert
-        Assert.Equal(n1, n2);
+        Assert.Equal(n1, n2, new RegexNodeComparerIgnoreId());
     }
 
     [Fact]
@@ -32,14 +22,12 @@ public class NodesTests
     {
         // Arrange
         var n1 = new CharacterNode('a');
-
-        RegexNode.ResetCounter();
         var n2 = new CharacterNode('a');
 
         // Act
 
         // Assert
-        Assert.Equal(n1, n2);
+        Assert.Equal(n1, n2, new RegexNodeComparerIgnoreId());
     }
 
     [Fact]
@@ -50,7 +38,6 @@ public class NodesTests
         n1.Add('a', 'z');
         n1.Add('A', 'Z');
 
-        RegexNode.ResetCounter();
         var n2 = new CharacterSetNode(false);
         n2.Add('a', 'z');
         n2.Add('A', 'Z');
@@ -58,7 +45,7 @@ public class NodesTests
         // Act
 
         // Assert
-        Assert.Equal(n1, n2);
+        Assert.Equal(n1, n2, new RegexNodeComparerIgnoreId());
     }
 
     [Fact]
@@ -69,18 +56,14 @@ public class NodesTests
             new CharacterNode('a'),
             new CharacterNode('b'));
 
-        RegexNode.ResetCounter();
         var n2 = new AlternationNode(
             new CharacterNode('a'),
             new CharacterNode('b'));
 
         // Act
-        var hash1 = n1.GetHashCode();
-        var hash2 = n2.GetHashCode();
 
         // Assert
-        Assert.Equal(n1, n2);
-        Assert.Equal(hash1, hash2);
+        Assert.Equal(n1, n2, new RegexNodeComparerIgnoreId());
     }
 
     [Fact]
@@ -91,18 +74,14 @@ public class NodesTests
             new CharacterNode('a'),
             new CharacterNode('b'));
 
-        RegexNode.ResetCounter();
         var n2 = new ConcatenationNode(
             new CharacterNode('a'),
             new CharacterNode('b'));
 
         // Act
-        var hash1 = n1.GetHashCode();
-        var hash2 = n2.GetHashCode();
 
         // Assert
-        Assert.Equal(n1, n2);
-        Assert.Equal(hash1, hash2);
+        Assert.Equal(n1, n2, new RegexNodeComparerIgnoreId());
     }
 
     [Fact]
@@ -112,17 +91,13 @@ public class NodesTests
         var n1 = new StarNode(
             new CharacterNode('a'));
 
-        RegexNode.ResetCounter();
         var n2 = new StarNode(
             new CharacterNode('a'));
 
         // Act
-        var hash1 = n1.GetHashCode();
-        var hash2 = n2.GetHashCode();
 
         // Assert
-        Assert.Equal(n1, n2);
-        Assert.Equal(hash1, hash2);
+        Assert.Equal(n1, n2, new RegexNodeComparerIgnoreId());
     }
 
     [Fact]
@@ -132,17 +107,13 @@ public class NodesTests
         var n1 = new PlusNode(
             new CharacterNode('a'));
 
-        RegexNode.ResetCounter();
         var n2 = new PlusNode(
             new CharacterNode('a'));
 
         // Act
-        var hash1 = n1.GetHashCode();
-        var hash2 = n2.GetHashCode();
 
         // Assert
-        Assert.Equal(n1, n2);
-        Assert.Equal(hash1, hash2);
+        Assert.Equal(n1, n2, new RegexNodeComparerIgnoreId());
     }
 
     [Fact]
@@ -152,17 +123,13 @@ public class NodesTests
         var n1 = new OptionalNode(
             new CharacterNode('a'));
 
-        RegexNode.ResetCounter();
         var n2 = new OptionalNode(
             new CharacterNode('a'));
 
         // Act
-        var hash1 = n1.GetHashCode();
-        var hash2 = n2.GetHashCode();
 
         // Assert
-        Assert.Equal(n1, n2);
-        Assert.Equal(hash1, hash2);
+        Assert.Equal(n1, n2, new RegexNodeComparerIgnoreId());
     }
 
     [Fact]
@@ -170,13 +137,11 @@ public class NodesTests
     {
         // Arrange
         RegexNode n1 = new CharacterNode('a');
-
-        RegexNode.ResetCounter();
         RegexNode n2 = new CharacterNode('a');
 
         // Act
 
         // Assert
-        Assert.Equal(n1, n2);
+        Assert.Equal(n1, n2, new RegexNodeComparerIgnoreId());
     }
 }

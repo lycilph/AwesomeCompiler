@@ -12,9 +12,6 @@ public class Regex : RegexNode
     {
         _pattern = pattern;
 
-        // Reset regex node counter
-        ResetCounter();
-
         // Tokenize string
         var tokens = RegexTokenizer.Tokenize(_pattern);
 
