@@ -11,6 +11,11 @@ public class PrintAstVisitor : IVisitor
         Console.WriteLine(Get(node)+$" - {node.Value}");
     }
 
+    public void Visit(CharacterSetNode node)
+    {
+        Console.WriteLine(Get(node) + $" - [{node}]");
+    }
+
     public void Visit(AlternationNode node)
     {
         Console.WriteLine(Get(node));

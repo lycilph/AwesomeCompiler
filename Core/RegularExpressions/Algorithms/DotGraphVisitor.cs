@@ -27,7 +27,13 @@ public class DotGraphVisitor : IVisitor<int>
 
     public int Visit(CharacterNode node)
     {
-        sb.AppendLine($"  {node.Id} [shape=circle,label={node.Value}]");
+        sb.AppendLine($"  {node.Id} [shape=circle,label=\"{node.Value}\"]");
+        return node.Id;
+    }
+
+    public int Visit(CharacterSetNode node)
+    {
+        sb.AppendLine($"  {node.Id} [shape=ellipse,label=\"[{node}]\"]");
         return node.Id;
     }
 

@@ -31,6 +31,22 @@ public class RegexTokenizer
                     tokens.Add(new RegexToken(RegexTokenType.RightParenthesis));
                     Advance();
                     break;
+                case '[':
+                    tokens.Add(new RegexToken(RegexTokenType.LeftBracket));
+                    Advance();
+                    break;
+                case ']':
+                    tokens.Add(new RegexToken(RegexTokenType.RightBracket));
+                    Advance();
+                    break;
+                case '-':
+                    tokens.Add(new RegexToken(RegexTokenType.Hyphen));
+                    Advance();
+                    break;
+                case '^':
+                    tokens.Add(new RegexToken(RegexTokenType.Negation));
+                    Advance();
+                    break;
                 case '|':
                     tokens.Add(new RegexToken(RegexTokenType.Alternation));
                     Advance();

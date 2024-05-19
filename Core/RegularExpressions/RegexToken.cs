@@ -4,6 +4,10 @@ public enum RegexTokenType
 {
     LeftParenthesis,  // (
     RightParenthesis, // )
+    LeftBracket,      // [
+    RightBracket,     // ]
+    Hyphen,           // -
+    Negation,         // ^
     Alternation,      // |
     Star,             // *
     Plus,             // +
