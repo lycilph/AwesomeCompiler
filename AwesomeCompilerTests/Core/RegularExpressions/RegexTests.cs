@@ -84,4 +84,25 @@ public class RegexTests
         // Assert
         Assert.Equal(inputNode, regex.Node);
     }
+
+    [Fact]
+    public void ParseRegex4()
+    {
+        // Arrange
+        var input = @"[0-9](\.[0-9]+)?";
+        var inputNode =
+            new ConcatenationNode(
+                new CharacterSetNode('0','9'),
+                new OptionalNode(
+                    new ConcatenationNode(
+                        new CharacterNode('.'),
+                        new PlusNode(
+                            new CharacterSetNode('0','9')))));
+
+        // Act
+        var regex = new Regex(input);
+
+        // Assert
+        Assert.Equal(inputNode, regex.Node);
+    }
 }

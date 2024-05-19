@@ -8,7 +8,7 @@ public class TokenizerTests
     public void RecognizeAllTokens()
     {
         // Arrange
-        var input = "()[]-^|*+?a";
+        var input = @"()[]-^|*+?a.\.";
         var input_tokens = new List<RegexToken>
         {
             new(RegexTokenType.LeftParenthesis),
@@ -22,6 +22,8 @@ public class TokenizerTests
             new(RegexTokenType.Plus),
             new(RegexTokenType.Optional),
             new(RegexTokenType.Character, 'a'),
+            new(RegexTokenType.Any),
+            new(RegexTokenType.Character, '.'),
             new(RegexTokenType.EndOfInput)
         };
 

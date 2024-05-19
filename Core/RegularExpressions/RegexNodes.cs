@@ -76,10 +76,19 @@ public class CharacterNode(char value) : RegexNode, IEquatable<CharacterNode>
 }
 
 [DebuggerDisplay("Character set node [{ToString()}]")]
-public class CharacterSetNode(bool negate) : RegexNode, IEquatable<CharacterSetNode>
+public class CharacterSetNode : RegexNode, IEquatable<CharacterSetNode>
 {
-    public bool Negate { get; } = negate;
+    public bool Negate { get; }
     public List<CharacterSetNodeElement> Elements { get; } = [];
+    public CharacterSetNode(bool negate)
+    {
+        Negate = negate;
+    }
+    public CharacterSetNode(char s, char e, bool negate = false)
+    {
+        Negate = negate;
+        Add(s,e);
+    }
     public void Add(CharacterSetNodeElement element) => Elements.Add(element);
     public void Add(char c) => Add(new SingleCharacterSetElement(c));
     public void Add(char s, char e) => Add(new RangeCharacterSetElement(s, e));

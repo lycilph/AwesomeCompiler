@@ -13,6 +13,21 @@ public class NodesTests
     }
 
     [Fact]
+    public void AnyCharacterNodeEqualityTest()
+    {
+        // Arrange
+        var n1 = new AnyCharacterNode();
+
+        RegexNode.ResetCounter();
+        var n2 = new AnyCharacterNode();
+
+        // Act
+
+        // Assert
+        Assert.Equal(n1, n2);
+    }
+
+    [Fact]
     public void CharacterNodeEqualityTest()
     {
         // Arrange
