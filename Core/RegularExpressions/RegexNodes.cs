@@ -1,4 +1,5 @@
 ﻿using Core.RegularExpressions.Algorithms;
+using System.Diagnostics;
 using System.Xml.Linq;
 
 namespace Core.RegularExpressions;
@@ -15,6 +16,7 @@ public abstract class RegexNode
     public abstract R Accept<R>(IVisitor<R> visitor);
 }
 
+[DebuggerDisplay("Character node [{Value}]")]
 public class CharacterNode(char value) : RegexNode
 {
     public char Value { get; } = value;
@@ -22,6 +24,7 @@ public class CharacterNode(char value) : RegexNode
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
 }
 
+[DebuggerDisplay("Character set node [{ToString()}]")]
 public class CharacterSetNode(bool negate) : RegexNode
 {
     public bool Negate { get; } = negate;
@@ -40,12 +43,14 @@ public class CharacterSetNode(bool negate) : RegexNode
 
 public abstract class CharacterSetNodeElement {}
 
+[DebuggerDisplay("{Value}")]
 public class SingleCharacterSetElement(char value) : CharacterSetNodeElement
 {
     public char Value { get; } = value;
     public override string ToString() => Value.ToString();
 }
 
+[DebuggerDisplay("{Start}-{End}")]
 public class RangeCharacterSetElement(char start, char end) : CharacterSetNodeElement
 {
     public char Start { get; } = start;
@@ -53,6 +58,7 @@ public class RangeCharacterSetElement(char start, char end) : CharacterSetNodeEl
     public override string ToString() => $"{Start}-{End}";
 }
 
+[DebuggerDisplay("Alternation node [|]")]
 public class AlternationNode(RegexNode left, RegexNode right) : RegexNode
 {
     public RegexNode Left { get; } = left;
@@ -61,6 +67,7 @@ public class AlternationNode(RegexNode left, RegexNode right) : RegexNode
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
 }
 
+[DebuggerDisplay("Concatetion node [.]")]
 public class ConcatenationNode(RegexNode left, RegexNode right) : RegexNode
 {
     public RegexNode Left { get; } = left;
@@ -69,6 +76,7 @@ public class ConcatenationNode(RegexNode left, RegexNode right) : RegexNode
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
 }
 
+[DebuggerDisplay("Star node [*]")]
 public class StarNode(RegexNode child) : RegexNode
 {
     public RegexNode Child { get; } = child;
@@ -76,6 +84,7 @@ public class StarNode(RegexNode child) : RegexNode
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
 }
 
+[DebuggerDisplay("Plus node [+]")]
 public class PlusNode(RegexNode child) : RegexNode
 {
     public RegexNode Child { get; } = child;
@@ -83,6 +92,7 @@ public class PlusNode(RegexNode child) : RegexNode
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
 }
 
+[DebuggerDisplay("Optional node [?]")]
 public class OptionalNode(RegexNode child) : RegexNode
 {
     public RegexNode Child { get; } = child;
