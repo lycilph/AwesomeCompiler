@@ -1,4 +1,6 @@
-﻿namespace Core.RegularExpressions.Algorithms;
+﻿using Core.RegularExpressions.Nodes;
+
+namespace Core.RegularExpressions.Algorithms;
 
 public class SimplifyVisitor : IVisitor
 {

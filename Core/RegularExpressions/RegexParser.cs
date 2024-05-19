@@ -1,5 +1,7 @@
 ﻿
 
+using Core.RegularExpressions.Nodes;
+
 namespace Core.RegularExpressions;
 
 public class RegexParser
@@ -26,7 +28,9 @@ public class RegexParser
 
     public RegexNode Parse()
     {
-        return ParseAlternation();
+        var node = ParseAlternation();
+        Match(RegexTokenType.EndOfInput);
+        return node;
     }
 
     private RegexNode ParseAlternation()

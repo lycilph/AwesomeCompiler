@@ -1,5 +1,6 @@
 ﻿using Core.RegularExpressions;
 using Core.RegularExpressions.Algorithms;
+using Core.RegularExpressions.Nodes;
 
 namespace AwesomeCompilerTests.Core.RegularExpressions;
 
@@ -9,7 +10,7 @@ public class SimplifyTests
     public void SimplifyAlternationTest1()
     {
         // Arranger
-        var input = "[a-z]|.]";
+        var input = "[a-z]|.";
         var regex = new Regex(input);
 
         // Act

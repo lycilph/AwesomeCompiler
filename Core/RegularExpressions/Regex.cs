@@ -1,11 +1,12 @@
-﻿using Core.RegularExpressions.Algorithms;
+﻿using Core.RegularExpressions.Nodes;
 
 namespace Core.RegularExpressions;
 
-public class Regex : RegexNode
+public class Regex : ISimplifiable
 {
     private readonly string _pattern;
 
+    public ISimplifiable? Parent { get; set; }
     public RegexNode Node { get; private set; }
 
     public Regex(string pattern)
@@ -20,17 +21,7 @@ public class Regex : RegexNode
         Node.Parent = this;
     }
 
-    public override void Accept(IVisitor visitor)
-    {
-        throw new InvalidOperationException();
-    }
-
-    public override R Accept<R>(IVisitor<R> visitor)
-    {
-        throw new InvalidOperationException();
-    }
-
-    public override void Replace(RegexNode oldNode, RegexNode newNode)
+    public void Replace(RegexNode oldNode, RegexNode newNode)
     {
         if (Node == oldNode)
             Node = newNode;

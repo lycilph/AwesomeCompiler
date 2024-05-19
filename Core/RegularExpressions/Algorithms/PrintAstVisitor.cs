@@ -1,10 +1,23 @@
-﻿namespace Core.RegularExpressions.Algorithms;
+﻿using Core.RegularExpressions.Nodes;
+
+namespace Core.RegularExpressions.Algorithms;
 
 public class PrintAstVisitor : IVisitor
 {
     private int indent = 0;
 
-    private string Get(RegexNode node) => new string(' ', indent) + node.GetType().Name + $" (id: {node.Id}, parent id: {node.Parent?.Id})";
+    private string Get(RegexNode node)
+    {
+        string? parentId;
+        if (node.Parent is RegexNode rn)
+            parentId = rn.Id.ToString();
+        else if (node.Parent is Regex r)
+            parentId = "root";
+        else
+            parentId = string.Empty;
+
+        return new string(' ', indent) + node.GetType().Name + $" (id: {node.Id}, parent id: {parentId})";
+    }
 
     public void Visit(AnyCharacterNode node)
     {

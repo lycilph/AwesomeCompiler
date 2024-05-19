@@ -1,8 +1,9 @@
 ﻿using Core.RegularExpressions;
+using Core.RegularExpressions.Nodes;
 
 namespace AwesomeCompilerTests.Core.RegularExpressions;
 
-public class RegexTests
+public class ParserTests
 {
     [Fact]
     public void ParseRegex1()
@@ -96,5 +97,15 @@ public class RegexTests
 
         // Assert
         Assert.Equal(inputNode, regex.Node, new RegexNodeComparerIgnoreId());
+    }
+
+    [Fact]
+    public void FailOnUnexpectedToken()
+    {
+        // Arrange
+        var input = @"a]";
+
+        // Act / Assert
+        Assert.Throws<InvalidDataException>(() => new Regex(input),);
     }
 }

@@ -1,4 +1,4 @@
-﻿using Core.RegularExpressions;
+﻿using Core.RegularExpressions.Nodes;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AwesomeCompilerTests.Core.RegularExpressions;

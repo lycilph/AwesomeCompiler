@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Core.RegularExpressions.Nodes;
 
 namespace Core.RegularExpressions.Algorithms;
 
