@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace Core.Graphs;
 
-[DebuggerDisplay("IsEpsilon={IsEpsilon}, IsAny={IsAny}, Chars={Chars.Count}")]
+[DebuggerDisplay("{ToString()}")]
 public class Symbol
 {
     public bool IsEpsilon { get; } = false;
