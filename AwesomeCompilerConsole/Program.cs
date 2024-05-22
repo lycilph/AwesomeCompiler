@@ -1,4 +1,6 @@
-﻿using Core.RegularExpressions;
+﻿using Core.Common;
+using Core.Graphs.Algorithms;
+using Core.RegularExpressions;
 using Core.RegularExpressions.Algorithms;
 
 namespace AwesomeCompilerConsole;
@@ -9,33 +11,19 @@ internal class Program
     {
         try
         {
-            var str = @"[a-z]|[0-9]";
+            var str = @"(a|b)*ab+[0-9]?";
+            var regex = new Regex(str);
+
             Console.WriteLine($"Input {str}");
             Console.WriteLine();
-            
-            var tokenizer = new RegexTokenizer(str);
-            var tokens = tokenizer.Tokenize();
-            Console.WriteLine("Tokens found:");
-            tokens.ForEach(Console.WriteLine);
-            Console.WriteLine();
 
-            var parser = new RegexParser(tokens);
-            var node = parser.Parse();
-            var printVisitor = new PrintAstVisitor();
-            Console.WriteLine("AST");
-            node.Accept(printVisitor);
-            Console.WriteLine();
+            var regexDotGraph = DotGraphVisitor.Generate(regex);
+            DotWrapper.Render("regex.png", regexDotGraph);
 
-            var simplifier = new SimplifyVisitor();
-            node.Accept(simplifier);
-            Console.WriteLine("Simplifed AST");
-            node.Accept(printVisitor);
-            Console.WriteLine();
+            var nfa = RegexToNFAVisitor.Accept(regex);
 
-            //var dotGraph = DotGraphVisitor.Generate(node);
-            //Console.WriteLine(dotGraph);
-
-            //DotWrapper.Render("graph.png", dotGraph);
+            var nfaDotGraph = DotGraphNodeWalker.Generate(nfa.Start);
+            DotWrapper.Render("nfa.png", nfaDotGraph);
         }
         catch (Exception ex)
         {

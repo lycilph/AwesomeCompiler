@@ -7,6 +7,8 @@ public class DotGraphVisitor : IVisitor<int>
 {
     private readonly StringBuilder sb = new();
 
+    public static string Generate(Regex regex) => Generate(regex.Node);
+
     public static string Generate(RegexNode node)
     {
         var visitor = new DotGraphVisitor();

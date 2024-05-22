@@ -4,9 +4,9 @@ namespace Core.RegularExpressions.Nodes;
 
 public abstract class RegexNode : ISimplifiable
 {
-    private static int counter = 0;
+    private static int id_counter = 0;
 
-    public int Id { get; } = counter++;
+    public int Id { get; } = id_counter++;
     public ISimplifiable? Parent { get; set; }
 
     public abstract void Accept(IVisitor visitor);

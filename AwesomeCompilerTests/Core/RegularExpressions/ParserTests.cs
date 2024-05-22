@@ -106,6 +106,6 @@ public class ParserTests
         var input = @"a]";
 
         // Act / Assert
-        Assert.Throws<InvalidDataException>(() => new Regex(input),);
+        Assert.Throws<InvalidDataException>(() => new Regex(input));
     }
 }

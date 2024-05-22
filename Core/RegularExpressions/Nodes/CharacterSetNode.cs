@@ -1,4 +1,5 @@
-﻿using Core.RegularExpressions.Algorithms;
+﻿using Core.Common;
+using Core.RegularExpressions.Algorithms;
 using System.Diagnostics;
 
 namespace Core.RegularExpressions.Nodes;
@@ -6,16 +7,16 @@ namespace Core.RegularExpressions.Nodes;
 [DebuggerDisplay("Character set node [{ToString()}]")]
 public class CharacterSetNode : RegexNode, IEquatable<CharacterSetNode>
 {
-    public bool Negate { get; }
+    public bool IsNegative { get; }
     public List<CharacterSetElement> Elements { get; } = [];
 
     public CharacterSetNode(bool negate)
     {
-        Negate = negate;
+        IsNegative = negate;
     }
     public CharacterSetNode(char s, char e, bool negate = false)
     {
-        Negate = negate;
+        IsNegative = negate;
         Add(s, e);
     }
 
@@ -25,9 +26,31 @@ public class CharacterSetNode : RegexNode, IEquatable<CharacterSetNode>
 
     public override string ToString()
     {
-        var negate = Negate ? "^" : "";
+        var negate = IsNegative ? "^" : "";
         var elements = string.Join("", Elements.Select(e => e.ToString()));
         return negate + elements;
+    }
+
+    public CharacterSet GetCharacterSet()
+    {
+        var set = new CharacterSet() {  IsNegative = IsNegative };
+
+        foreach (var element in Elements)
+        {
+            switch (element)
+            {
+                case SingleCharacterSetElement s:
+                    set.Add(s.Value);
+                    break;
+                case RangeCharacterSetElement r:
+                    set.Add(r.Start, r.End);
+                    break;
+                default:
+                    throw new InvalidOperationException();
+            };
+        }
+
+        return set;
     }
 
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
@@ -41,7 +64,7 @@ public class CharacterSetNode : RegexNode, IEquatable<CharacterSetNode>
             return false;
 
         return Id == other.Id &&
-               Negate == other.Negate &&
+               IsNegative == other.IsNegative &&
                Elements.SequenceEqual(other.Elements);
     }
     public override bool Equals(object? obj)
@@ -53,7 +76,7 @@ public class CharacterSetNode : RegexNode, IEquatable<CharacterSetNode>
         // Combine hash codes of individual fields (from ChatGPT)
         int hash = 17;
         hash = hash * 23 + Id.GetHashCode();
-        hash = hash * 23 + Negate.GetHashCode();
+        hash = hash * 23 + IsNegative.GetHashCode();
         foreach (var e in Elements)
             hash = hash * 23 + e.GetHashCode();
         return hash;

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Core;
+namespace Core.Common;
 
 public static class DotWrapper
 {

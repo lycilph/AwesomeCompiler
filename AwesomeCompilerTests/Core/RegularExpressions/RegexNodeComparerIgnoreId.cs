@@ -23,7 +23,7 @@ public class RegexNodeComparerIgnoreId : IEqualityComparer<RegexNode>
             return char1.Value == char2.Value;
 
         if (x is CharacterSetNode set1 && y is CharacterSetNode set2)
-            return set1.Negate == set2.Negate &&
+            return set1.IsNegative == set2.IsNegative &&
                    set1.Elements.SequenceEqual(set2.Elements);
 
         if (x is AlternationNode alt1 && y is AlternationNode alt2)
