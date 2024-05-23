@@ -4,19 +4,15 @@
 public class NFAToDFACreator
 {
     private readonly Dictionary<HashSet<Node>, Node> known_states = new(HashSet<Node>.CreateSetComparer());
-    private readonly HashSet<Symbol> symbols = [];
+    private HashSet<Symbol> symbols = [];
 
     public Node Execute(Node nfa)
     {
         // Clear state
         known_states.Clear();
-        symbols.Clear();
 
         // Find symbols
-        FindSymbols(nfa);
-
-        foreach (var s in symbols)
-            Console.WriteLine($"Found symbol {s}");
+        symbols = Collector.CollectSymbols(nfa);
 
         // Construct new states
         var start = ConstructStates(nfa);
@@ -34,30 +30,6 @@ public class NFAToDFACreator
             foreach (var node in state.Nodes)
                 if (node.IsFinal)
                     state.IsFinal = true;
-    }
-
-    private void FindSymbols(Node node)
-    {
-        var visited = new HashSet<Node>();
-        var toVisit = new Stack<Node>();
-
-        // Initialize stack
-        toVisit.Push(node);
-
-        while (toVisit.Count > 0)
-        {
-            var n = toVisit.Pop();
-            visited.Add(n);
-
-            foreach (var t in n.Transitions)
-            {
-                if (!t.Symbol.IsEpsilon)
-                    symbols.Add(t.Symbol);
-
-                if (!visited.Contains(t.To))
-                    toVisit.Push(t.To);
-            }
-        }
     }
 
     private Node ConstructStates(Node nfa)

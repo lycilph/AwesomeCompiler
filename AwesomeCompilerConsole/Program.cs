@@ -11,7 +11,8 @@ internal class Program
     {
         try
         {
-            var str = @"(a|b)*abb";
+            var str = @"[a-z_]([a-z_]|[A-Z]|[0-9])*";
+            //var str = @"(a|b)*abb";
             var regex = new Regex(str);
 
             Console.WriteLine($"Input {str}");
@@ -30,6 +31,12 @@ internal class Program
 
             var dfaDotGraph = DotGraphNodeWalker.Generate(dfa);
             DotWrapper.Render("dfa.png", dfaDotGraph);
+
+            var dfaStateMinizser = new DFAStateMinimizer();
+            var minimizedDFA = dfaStateMinizser.Execute(dfa);
+
+            var minimizedDfaDotGraph = DotGraphNodeWalker.Generate(minimizedDFA);
+            DotWrapper.Render("minimized_dfa.png", minimizedDfaDotGraph);
         }
         catch (Exception ex)
         {
