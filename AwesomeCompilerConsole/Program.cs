@@ -11,7 +11,7 @@ internal class Program
     {
         try
         {
-            var str = @"(a|b)*ab+[0-9]?";
+            var str = @"(a|b)*abb";
             var regex = new Regex(str);
 
             Console.WriteLine($"Input {str}");
@@ -24,13 +24,19 @@ internal class Program
 
             var nfaDotGraph = DotGraphNodeWalker.Generate(nfa.Start);
             DotWrapper.Render("nfa.png", nfaDotGraph);
+
+            var dfaCreator = new NFAToDFACreator();
+            var dfa = dfaCreator.Execute(nfa.Start);
+
+            var dfaDotGraph = DotGraphNodeWalker.Generate(dfa);
+            DotWrapper.Render("dfa.png", dfaDotGraph);
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
         }
 
-        Console.Write("Press any key to continue...");
-        Console.ReadKey();
+        //Console.Write("Press any key to continue...");
+        //Console.ReadKey();
     }
 }

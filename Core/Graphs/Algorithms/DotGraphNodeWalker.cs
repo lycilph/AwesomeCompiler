@@ -38,6 +38,9 @@ public class DotGraphNodeWalker
         while (toVisit.Count > 0)
         {
             var n = toVisit.Pop();
+            if (visited.Contains(n))
+                continue;
+
             visited.Add(n);
 
             var shape = n.IsFinal ? "doublecircle" : "circle";
