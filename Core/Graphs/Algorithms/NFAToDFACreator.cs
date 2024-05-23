@@ -6,6 +6,12 @@ public class NFAToDFACreator
     private readonly Dictionary<HashSet<Node>, Node> known_states = new(HashSet<Node>.CreateSetComparer());
     private HashSet<Symbol> symbols = [];
 
+    public static Node Run(Node nfa)
+    {
+        var creator = new NFAToDFACreator();
+        return creator.Execute(nfa);
+    }
+
     public Node Execute(Node nfa)
     {
         // Clear state

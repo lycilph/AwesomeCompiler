@@ -21,7 +21,10 @@ public class AlternationNode : RegexNode, IEquatable<AlternationNode>
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
 
-    public override void Replace(RegexNode oldNode, RegexNode newNode) { }
+    public override void Replace(RegexNode oldNode, RegexNode newNode)
+    {
+
+    }
 
     public bool Equals(AlternationNode? other)
     {

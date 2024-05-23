@@ -14,6 +14,10 @@ public class CharacterSetNode : RegexNode, IEquatable<CharacterSetNode>
     {
         IsNegative = negate;
     }
+    public CharacterSetNode(char c)
+    {
+        Add(c);
+    }
     public CharacterSetNode(char s, char e, bool negate = false)
     {
         IsNegative = negate;

@@ -4,6 +4,12 @@ public class DFAStateMinimizer
 {
     private HashSet<Symbol> symbols = [];
 
+    public static Node Run(Node nfa)
+    {
+        var minimizer = new DFAStateMinimizer();
+        return minimizer.Execute(nfa);
+    }
+
     public Node Execute(Node dfa)
     {
         // Find input language symbols (the match all is implicitly included further on)

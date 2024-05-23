@@ -10,6 +10,11 @@ public class SimplifyVisitor : IVisitor
 
     public void Visit(CharacterNode node)
     {
+        if (node.Parent == null)
+            return;
+
+        var set = new CharacterSetNode(node.Value);
+        node.Parent.Replace(node, set);
     }
 
     public void Visit(CharacterSetNode node)
@@ -25,15 +30,13 @@ public class SimplifyVisitor : IVisitor
             return;
 
         if (node.Left is AnyCharacterNode &&
-            (node.Right is CharacterNode ||
-             node.Right is CharacterSetNode)) 
+            node.Right is CharacterSetNode) 
         {
             node.Parent.Replace(node, node.Left);
         }
 
         if (node.Right is AnyCharacterNode &&
-            (node.Left is CharacterNode ||
-             node.Left is CharacterSetNode))
+            node.Left is CharacterSetNode)
         {
             node.Parent.Replace(node, node.Right);
         }
