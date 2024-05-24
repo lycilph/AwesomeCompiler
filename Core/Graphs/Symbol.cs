@@ -24,6 +24,14 @@ public class Symbol : IEquatable<Symbol>
         Set = set;
     }
 
+    public HashSet<char> GetCharSet()
+    {
+        if (IsAny)
+            return CharacterSet.All().GetCharSet();
+        else
+            return Set.GetCharSet();
+    }
+
     public override string ToString()
     {
         return this switch

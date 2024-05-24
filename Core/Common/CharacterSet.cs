@@ -12,6 +12,10 @@ public class CharacterSet : IEquatable<CharacterSet>
         Chars.Add(c);
         Label = c.CharToString();
     }
+    public CharacterSet(char s, char e)
+    {
+        Add(s, e);
+    }
 
     public void Add(char c)
     {
@@ -24,6 +28,20 @@ public class CharacterSet : IEquatable<CharacterSet>
         for (char c = s; c != e; c++)
             Chars.Add(c);
         Label += $"{s.CharToString()}-{e.CharToString()}";
+    }
+
+    public HashSet<char> GetCharSet()
+    {
+        if (IsNegative)
+        {
+            // Remove Chars from All
+            var result = All();
+            foreach (var c in Chars)
+                result.Chars.Remove(c);
+            return result.Chars;
+        }
+        else
+            return Chars;
     }
 
     public override string ToString() => $"[{(IsNegative?"^":"")}{Label}]";
@@ -53,4 +71,6 @@ public class CharacterSet : IEquatable<CharacterSet>
             hash = hash ^ HashCode.Combine(c);
         return hash;
     }
+
+    public static CharacterSet All() => new CharacterSet((char)0, (char)127);
 }

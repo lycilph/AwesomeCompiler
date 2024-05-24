@@ -1,8 +1,10 @@
 ﻿using Core.Common;
 using Core.Graphs;
 using Core.Graphs.Algorithms;
+using Core.LexicalAnalysis;
 using Core.RegularExpressions;
 using Core.RegularExpressions.Algorithms;
+using System.Text.Json;
 
 namespace AwesomeCompilerConsole;
 
@@ -13,6 +15,9 @@ internal class Program
         try
         {
             Lexer();
+
+            Console.Write("Press any key to continue...");
+            Console.ReadKey();
         }
         catch (Exception ex)
         {
@@ -20,6 +25,57 @@ internal class Program
             Console.Write("Press any key to continue...");
             Console.ReadKey();
         }
+    }
+
+    private static void ReadTransitionTableFromFile()
+    {
+        var str = File.ReadAllText("transition_table.txt");
+        var transition_table = JsonSerializer.Deserialize<Dictionary<int, Dictionary<char, int>>>(str);
+
+        Console.Write("Press any key to continue...");
+        Console.ReadKey();
+    }
+
+    private static void WriteTransitionTableToFile()
+    {
+        Dictionary<int, Dictionary<char, int>> transition_table = [];
+
+        transition_table.Add(0, new Dictionary<char, int>());
+        transition_table.Add(1, new Dictionary<char, int>());
+        transition_table.Add(2, new Dictionary<char, int>());
+
+        transition_table[0]['a'] = 1;
+        transition_table[0]['b'] = 2;
+
+        transition_table[1]['a'] = 0;
+        transition_table[1]['b'] = -1;
+
+        transition_table[2]['a'] = -1;
+        transition_table[2]['b'] = -1;
+
+        var str = JsonSerializer.Serialize(transition_table);
+        Console.WriteLine(str);
+        File.WriteAllText("transition_table.txt", str);
+    }
+
+    private static void ReadFile()
+    {
+        var path = @"TestInput\SimpleProg1.txt";
+
+        using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
+        using (var streamReader = new StreamReader(fileStream))
+        using (var reader = new PushbackReader(streamReader))
+        {
+            int i;
+            while ((i = reader.Read()) != -1)
+            {
+                Console.Write((char)i);
+            }
+        }
+
+        Console.WriteLine();
+        Console.Write("Press any key to continue...");
+        Console.ReadKey();
     }
 
     private static void Lexer()
@@ -62,6 +118,8 @@ internal class Program
 
         var minimized = DFAStateMinimizer.Run(dfa);
         RenderDotGraph("minimized_dfa.png", minimized);
+
+        var lexer = new Lexer(minimized);
     }
 
     private static void RenderDotGraph(string filename, Regex re)
