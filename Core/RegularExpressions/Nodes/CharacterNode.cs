@@ -1,4 +1,5 @@
-﻿using Core.RegularExpressions.Algorithms;
+﻿using Core.Common;
+using Core.RegularExpressions.Algorithms;
 using System.Diagnostics;
 
 namespace Core.RegularExpressions.Nodes;
@@ -7,17 +8,8 @@ namespace Core.RegularExpressions.Nodes;
 public class CharacterNode(char value) : RegexNode, IEquatable<CharacterNode>
 {
     public char Value { get; } = value;
-    public override string ToString()
-    {
-        return Value switch
-        {
-            '\"' => @"\""",
-            '\\' => @"\\",
-            '\n' => @"\\n",
-            '\r' => @"\\r",
-            _ => Value.ToString(),
-        };
-    }
+
+    public override string ToString() => Value.CharToString();
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
 
