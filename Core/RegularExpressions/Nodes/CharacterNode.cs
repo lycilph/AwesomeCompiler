@@ -11,6 +11,7 @@ public class CharacterNode(char value) : RegexNode, IEquatable<CharacterNode>
     {
         return Value switch
         {
+            '\"' => @"\""",
             '\\' => @"\\",
             '\n' => @"\\n",
             '\r' => @"\\r",

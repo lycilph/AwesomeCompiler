@@ -12,11 +12,19 @@ internal class Program
     {
         try
         {
+            var regexSimplifier = new SimplifyVisitor();
+
             var numberRegex = new Regex(@"[0-9](\.[0-9]+)?");
+            numberRegex.Node.Accept(regexSimplifier);
             RenderDotGraph("number_regex.png", numberRegex);
 
             var identifierRegex = new Regex("[a-z_]([a-z_]|[A-Z]|[0-9])*");
+            identifierRegex.Node.Accept(regexSimplifier);
             RenderDotGraph("identifier_regex.png", identifierRegex);
+
+            var stringRegex = new Regex("\"[^\"]*\"");
+            stringRegex.Node.Accept(regexSimplifier);
+            RenderDotGraph("string_regex.png", stringRegex);
 
             var numberNFA = RegexToNFAVisitor.Accept(numberRegex);
             RenderDotGraph("number_nfa.png", numberNFA.Start);
@@ -24,7 +32,10 @@ internal class Program
             var identifierNFA = RegexToNFAVisitor.Accept(identifierRegex);
             RenderDotGraph("identifier_nfa.png", identifierNFA.Start);
 
-            var nfa = Graph.Combine(numberNFA, identifierNFA);
+            var stringNFA = RegexToNFAVisitor.Accept(stringRegex);
+            RenderDotGraph("string_nfa.png", stringNFA.Start);
+
+            var nfa = Graph.Combine([numberNFA, identifierNFA, stringNFA]);
             RenderDotGraph("combined_nfa.png", nfa.Start);
 
             var dfa = NFAToDFACreator.Run(nfa.Start);
@@ -36,10 +47,9 @@ internal class Program
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
+            Console.Write("Press any key to continue...");
+            Console.ReadKey();
         }
-
-        //Console.Write("Press any key to continue...");
-        //Console.ReadKey();
     }
 
     private static void RenderDotGraph(string filename, Regex re)

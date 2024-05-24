@@ -6,8 +6,8 @@ namespace Core.RegularExpressions.Nodes;
 [DebuggerDisplay("Alternation node [|]")]
 public class AlternationNode : RegexNode, IEquatable<AlternationNode>
 {
-    public RegexNode Left { get; }
-    public RegexNode Right { get; }
+    public RegexNode Left { get; private set; }
+    public RegexNode Right { get; private set; }
 
     public AlternationNode(RegexNode left, RegexNode right)
     {
@@ -23,7 +23,10 @@ public class AlternationNode : RegexNode, IEquatable<AlternationNode>
 
     public override void Replace(RegexNode oldNode, RegexNode newNode)
     {
-
+        if (oldNode == Left)
+            Left = newNode;
+        if (oldNode == Right)
+            Right = newNode;
     }
 
     public bool Equals(AlternationNode? other)

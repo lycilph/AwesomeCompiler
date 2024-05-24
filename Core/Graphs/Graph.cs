@@ -8,15 +8,15 @@ public class Graph
     public Node Start = null!;
     public List<Node> End = [];
 
-    public static Graph Combine(Graph g1, Graph g2)
+    public static Graph Combine(IEnumerable<Graph> graphs)
     {
         var result = new Graph() { Start = new Node() };
 
-        result.Start.AddEpsilonTransition(g1.Start);
-        result.Start.AddEpsilonTransition(g2.Start);
-
-        result.End.AddRange(g1.End);
-        result.End.AddRange(g2.End);
+        foreach (var g in graphs)
+        {
+            result.Start.AddEpsilonTransition(g.Start);
+            result.End.AddRange(g.End);
+        }
 
         return result;
     }

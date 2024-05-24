@@ -6,8 +6,8 @@ namespace Core.RegularExpressions.Nodes;
 [DebuggerDisplay("Concatetion node [.]")]
 public class ConcatenationNode : RegexNode, IEquatable<ConcatenationNode>
 {
-    public RegexNode Left { get; }
-    public RegexNode Right { get; }
+    public RegexNode Left { get; private set; }
+    public RegexNode Right { get; private set; }
 
     public ConcatenationNode(RegexNode left, RegexNode right)
     {
@@ -21,7 +21,13 @@ public class ConcatenationNode : RegexNode, IEquatable<ConcatenationNode>
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
 
-    public override void Replace(RegexNode oldNode, RegexNode newNode) { }
+    public override void Replace(RegexNode oldNode, RegexNode newNode)
+    {
+        if (oldNode == Left)
+            Left = newNode;
+        if (oldNode == Right)
+            Right = newNode;
+    }
 
     public bool Equals(ConcatenationNode? other)
     {

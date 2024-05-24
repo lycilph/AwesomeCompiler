@@ -40,6 +40,14 @@ public class SimplifyVisitor : IVisitor
         {
             node.Parent.Replace(node, node.Right);
         }
+
+        if (node.Left is CharacterSetNode c1 &&
+            node.Right is CharacterSetNode c2)
+        {
+            foreach (var element in c2.Elements)
+                c1.Add(element);
+            node.Parent.Replace(node, c1);
+        }
     }
 
     public void Visit(ConcatenationNode node)

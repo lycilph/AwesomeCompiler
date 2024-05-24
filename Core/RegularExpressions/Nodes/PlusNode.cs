@@ -6,7 +6,7 @@ namespace Core.RegularExpressions.Nodes;
 [DebuggerDisplay("Plus node [+]")]
 public class PlusNode : RegexNode, IEquatable<PlusNode>
 {
-    public RegexNode Child { get; }
+    public RegexNode Child { get; private set; }
 
     public PlusNode(RegexNode child)
     {
@@ -17,7 +17,11 @@ public class PlusNode : RegexNode, IEquatable<PlusNode>
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
 
-    public override void Replace(RegexNode oldNode, RegexNode newNode) { }
+    public override void Replace(RegexNode oldNode, RegexNode newNode)
+    {
+        if (Child == oldNode)
+            Child = newNode;
+    }
 
     public bool Equals(PlusNode? other)
     {

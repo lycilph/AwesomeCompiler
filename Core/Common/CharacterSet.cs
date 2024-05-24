@@ -10,22 +10,33 @@ public class CharacterSet : IEquatable<CharacterSet>
     public CharacterSet(char c)
     {
         Chars.Add(c);
-        Label = c.ToString();
+        Label = CharToString(c);
     }
 
     public void Add(char c)
     {
         Chars.Add(c);
-        Label += c.ToString();
+        Label += CharToString(c);
     }
 
     public void Add(char s, char e)
     {
         for (char c = s; c != e; c++)
             Chars.Add(c);
-        Label += $"{s}-{e}";
+        Label += $"{CharToString(s)}-{CharToString(e)}";
     }
 
+    public static string CharToString(char c)
+    {
+        return c switch
+        {
+            '\"' => @"\""",
+            '\\' => @"\\",
+            '\n' => @"\\n",
+            '\r' => @"\\r",
+            _ => c.ToString(),
+        };
+    }
     public override string ToString() => (IsNegative?"^":"") + Label;
 
     public bool Equals(CharacterSet? other)
@@ -37,7 +48,7 @@ public class CharacterSet : IEquatable<CharacterSet>
                Chars.SequenceEqual(other.Chars);
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         return Equals(obj as CharacterSet);
     }

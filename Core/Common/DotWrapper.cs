@@ -27,10 +27,10 @@ public static class DotWrapper
 
         var stdOuput = process.StandardOutput.ReadToEnd();
         if (!string.IsNullOrEmpty(stdOuput))
-            Console.WriteLine(stdOuput);
+            throw new InvalidOperationException(stdOuput);
 
         var stdErr = process.StandardError.ReadToEnd();
         if (!string.IsNullOrEmpty(stdErr))
-            Console.WriteLine(stdErr);
+            throw new InvalidOperationException(stdErr);
     }
 }
