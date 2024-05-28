@@ -19,6 +19,7 @@ public class Lexer
         {
             NextToken(ref input);
         }
+        Console.WriteLine("[End of input]");
     }
 
     public void NextToken(ref string input)

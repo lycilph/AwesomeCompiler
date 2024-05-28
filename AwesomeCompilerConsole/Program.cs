@@ -19,8 +19,14 @@ internal class Program
             lexer_generator.Add(new Regex(@"[a-zA-Z_]([a-z_]|[A-Z]|[0-9])*"), "Identifier");
             lexer_generator.Add(new Regex("\"[^\"]*\""), "String");
             lexer_generator.Add(new Regex("[ \n\r\t]+"), "Whitespace");
+            lexer_generator.Add(new Regex(@"//[^\n]*\n"), "Comment");
             lexer_generator.Add(new Regex("{"), "LeftBracket");
             lexer_generator.Add(new Regex("}"), "RightBracket");
+            lexer_generator.Add(new Regex(@"\("), "leftParenthesis");
+            lexer_generator.Add(new Regex(@"\)"), "RightParenthesis");
+            lexer_generator.Add(new Regex(";"), "LineTerminator");
+            lexer_generator.Add(new Regex(@"\+"), "Plus");
+            lexer_generator.Add(new Regex("="), "Equal");
 
             var lexer = lexer_generator.Generate();
             var str = File.ReadAllText(@"TestInput\SimpleProg1.txt");

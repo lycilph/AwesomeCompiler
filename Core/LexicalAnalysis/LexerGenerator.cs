@@ -17,14 +17,16 @@ public class LexerGenerator
 
     public Lexer Generate()
     {
+        Directory.CreateDirectory("Output");
+
         var combined_nfa = Graph.Combine(nfas);
-        RenderDotGraph("combined_nfa.png", combined_nfa.Start);
+        RenderDotGraph(@"Output\combined_nfa.png", combined_nfa.Start);
      
         var dfa = NFAToDFACreator.Run(combined_nfa.Start);
-        RenderDotGraph("dfa.png", dfa);
+        RenderDotGraph(@"Output\dfa.png", dfa);
 
         var minimized_dfa = DFAStateMinimizer.Run(dfa);
-        RenderDotGraph("minimized_dfa.png", minimized_dfa);
+        RenderDotGraph(@"Output\minimized_dfa.png", minimized_dfa);
 
         GenerateTables(minimized_dfa);
         lexer.Set(minimized_dfa.Id, transition_table, accept_states);
@@ -35,11 +37,11 @@ public class LexerGenerator
     public void Add(Regex regex, string rule)
     {
         regex.Node.Accept(simplifier);
-        RenderDotGraph(rule+"_regex.png", regex);
+        RenderDotGraph(@"Output\"+rule+"_regex.png", regex);
 
         var nfa = regex.Node.Accept(nfa_visitor);
         nfa.End.First().Rule = rule;
-        RenderDotGraph(rule + "_nfa.png", nfa.Start);
+        RenderDotGraph(@"Output\"+rule+"_nfa.png", nfa.Start);
 
         nfas.Add(nfa);
     }
