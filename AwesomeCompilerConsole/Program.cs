@@ -14,31 +14,7 @@ internal class Program
     {
         try
         {
-            var lexer_generator = new LexerGenerator();
-            //lexer_generator.Add(new Regex("abc|(abc)*d"), "Test");
-            lexer_generator.Add(new Regex(@"[0-9](\.[0-9]+)?"), "Number");
-            lexer_generator.Add(new Regex(@"[a-zA-Z_]([a-z_]|[A-Z]|[0-9])*"), "Identifier");
-            lexer_generator.Add(new Regex("\"[^\"]*\""), "String");
-            lexer_generator.Add(new Regex("[ \n\r\t]+"), "Whitespace");
-            lexer_generator.Add(new Regex(@"//[^\n]*\n"), "Comment");
-            lexer_generator.Add(new Regex("{"), "LeftBracket");
-            lexer_generator.Add(new Regex("}"), "RightBracket");
-            lexer_generator.Add(new Regex(@"\("), "leftParenthesis");
-            lexer_generator.Add(new Regex(@"\)"), "RightParenthesis");
-            lexer_generator.Add(new Regex(";"), "LineTerminator");
-            lexer_generator.Add(new Regex(@"\+"), "Plus");
-            lexer_generator.Add(new Regex("="), "Equal");
-
-            var lexer = lexer_generator.Generate();
-            var str = File.ReadAllText(@"TestInput\SimpleProg1.txt");
-            lexer.Run(str);
-
-            //var lexer = lexer_generator.Generate();
-            //var str = "abcabcabcd";
-            //lexer.Run(str, verbose_output: true);
-
-            Console.Write("Press any key to continue...");
-            Console.ReadKey();
+            FullLexerExample();
         }
         catch (Exception ex)
         {
@@ -46,6 +22,48 @@ internal class Program
             Console.Write("Press any key to continue...");
             Console.ReadKey();
         }
+    }
+
+    private static void LexingWithBacktracking()
+    {
+        var lexer_generator = new LexerGenerator();
+        lexer_generator.Add(new Regex("abc|(abc)*d"), "Test");
+
+        var lexer = lexer_generator.Generate();
+        var str = "abcabcabcd";
+        lexer.Run(str, verbose_output: true);
+        var tokens = lexer.Run(str);
+        foreach (var token in tokens)
+            Console.WriteLine($"Found token: {token}");
+
+        Console.Write("Press any key to continue...");
+        Console.ReadKey();
+    }
+
+    private static void FullLexerExample()
+    {
+        var lexer_generator = new LexerGenerator();
+        lexer_generator.Add(new Regex(@"[0-9](\.[0-9]+)?"), "Number");
+        lexer_generator.Add(new Regex(@"[a-zA-Z_]([a-z_]|[A-Z]|[0-9])*"), "Identifier");
+        lexer_generator.Add(new Regex("\"[^\"]*\""), "String");
+        lexer_generator.Add(new Regex("[ \n\r\t]+"), "Whitespace", skip: true);
+        lexer_generator.Add(new Regex(@"//[^\n]*\n"), "Comment", skip: true);
+        lexer_generator.Add(new Regex("{"), "LeftBracket");
+        lexer_generator.Add(new Regex("}"), "RightBracket");
+        lexer_generator.Add(new Regex(@"\("), "leftParenthesis");
+        lexer_generator.Add(new Regex(@"\)"), "RightParenthesis");
+        lexer_generator.Add(new Regex(";"), "LineTerminator");
+        lexer_generator.Add(new Regex(@"\+"), "Plus");
+        lexer_generator.Add(new Regex("="), "Equal");
+
+        var lexer = lexer_generator.Generate();
+        var str = File.ReadAllText(@"TestInput\SimpleProg1.txt");
+        var tokens = lexer.Run(str);
+        foreach (var token in tokens)
+            Console.WriteLine($"Found token: {token}");
+
+        Console.Write("Press any key to continue...");
+        Console.ReadKey();
     }
 
     private static void ReadTransitionTableFromFile()

@@ -13,7 +13,7 @@ public class LexerGenerator
     private readonly SimplifyVisitor simplifier = new SimplifyVisitor();
     private readonly RegexToNFAVisitor nfa_visitor = new RegexToNFAVisitor();
     private readonly Dictionary<int, Dictionary<char, int>> transition_table = [];
-    private readonly Dictionary<int, string> accept_states = [];
+    private readonly Dictionary<int, Tuple<string,bool>> accept_states = [];
 
     public Lexer Generate()
     {
@@ -34,13 +34,14 @@ public class LexerGenerator
         return lexer;
     }
 
-    public void Add(Regex regex, string rule)
+    public void Add(Regex regex, string rule, bool skip = false)
     {
         regex.Node.Accept(simplifier);
         RenderDotGraph(@"Output\"+rule+"_regex.png", regex);
 
         var nfa = regex.Node.Accept(nfa_visitor);
         nfa.End.First().Rule = rule;
+        nfa.End.First().Skip = skip;
         RenderDotGraph(@"Output\"+rule+"_nfa.png", nfa.Start);
 
         nfas.Add(nfa);
@@ -74,7 +75,7 @@ public class LexerGenerator
             visited.Add(n);
 
             if (n.IsFinal)
-                accept_states[n.Id] = n.Rule;
+                accept_states[n.Id] = Tuple.Create(n.Rule, n.Skip);
 
             foreach (var t in n.Transitions)
             {

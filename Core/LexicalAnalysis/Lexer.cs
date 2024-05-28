@@ -3,31 +3,38 @@
 public class Lexer
 {
     private Dictionary<int, Dictionary<char, int>> transition_table = [];
-    private Dictionary<int, string> accept_states = [];
+    private Dictionary<int, Tuple<string,bool>> accept_states = [];
     private int start_state;
 
-    public void Set(int start, Dictionary<int, Dictionary<char, int>> transition, Dictionary<int, string> accept)
+    public void Set(int start, Dictionary<int, Dictionary<char, int>> transition, Dictionary<int, Tuple<string, bool>> accept)
     {
         start_state = start;
         transition_table = transition;
         accept_states = accept;
     }
 
-    public void Run(string input, bool verbose_output = false)
+    public List<string> Run(string input, bool verbose_output = false)
     {
+        List<string> result = [];
+
         while (input.Length > 0)
         {
-            NextToken(ref input, verbose_output);
+            var token = NextToken(ref input, verbose_output);
+            if (!string.IsNullOrEmpty(token))
+                result.Add(token);
         }
-        Console.WriteLine("[End of input]");
+        result.Add("[EndOfInput]");
+        if (verbose_output)
+            Console.WriteLine("[End of input]");
+        return result;
     }
 
-    public void NextToken(ref string input, bool verbose_output = false)
+    public string NextToken(ref string input, bool verbose_output = false)
     {
         var states = new Stack<int>();
         var current_state = start_state;
         var next_state = -1;
-        var accept_state = string.Empty;
+        Tuple<string,bool> accept_state;
         var index = 0;
         char c;
 
@@ -42,7 +49,6 @@ public class Lexer
         {
             c = input[index];
             
-
             if (verbose_output)
                 Console.WriteLine($"Loop: current_state={current_state}, accepts={accept_state}, c={c}, Stack={string.Join(",", states)}");
 
@@ -64,7 +70,7 @@ public class Lexer
             {
                 states.Clear();
                 if (verbose_output)
-                    Console.WriteLine($"  Found accept state {accept_state}, clearing stack");
+                    Console.WriteLine($"  Found accept state {accept_state.Item1} (skip={accept_state.Item2}), clearing stack");
             }
 
             states.Push(current_state);
@@ -90,17 +96,21 @@ public class Lexer
             index--;
         }
 
+        var output = input[..index];
         // Output found token + rule
-        Console.WriteLine($"Found token {input[..index]} - rule {accept_state}");
+        if (accept_state.Item2)
+        {
+            if (verbose_output)
+                Console.WriteLine($"Skipping token {output} - rule {accept_state.Item1}");
+            output = string.Empty;
+        }
+        else
+        {
+            if (verbose_output)
+                Console.WriteLine($"Found token {output} - rule {accept_state.Item1}");
+        }
         input = input.Remove(0, index);
+
+        return output;
     }
-
-    //private void WriteTablesToFile()
-    //{
-    //    var str = JsonSerializer.Serialize(transition_table);
-    //    File.WriteAllText("transition_table.txt", str);
-
-    //    str = JsonSerializer.Serialize(accept_states);
-    //    File.WriteAllText("accept_states.txt", str);
-    //}
 }

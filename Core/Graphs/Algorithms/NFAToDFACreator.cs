@@ -38,6 +38,7 @@ public class NFAToDFACreator
                 {
                     state.IsFinal = true;
                     state.Rule = node.Rule;
+                    state.Skip = node.Skip;
                 }
     }
 

@@ -12,6 +12,7 @@ public class Node(bool final = false)
     public List<Transition> Transitions { get; set; } = [];
 
     public string Rule { get; set; } = string.Empty; // This is used to mark final states with the "rule" that it accepts
+    public bool Skip { get; set; } = false; // Means that this is skipped when used in a lexer
     public HashSet<Node> Nodes { get; set; } = []; // This is used for storage for dfa generation (amongst other things)
 
     private string GetTransions() => string.Join(",", Transitions.Select(t => t.To.Id));

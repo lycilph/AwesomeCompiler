@@ -40,7 +40,8 @@ public class DFAStateMinimizer
         {
             var isFinal = set.Where(n => n.IsFinal).Any();
             var rule = isFinal ? set.First().Rule : string.Empty;
-            setToNodeMap[set] = new Node(isFinal) { Rule = rule };
+            var skip = isFinal ? set.First().Skip : false;
+            setToNodeMap[set] = new Node(isFinal) { Rule = rule, Skip = skip };
         }
 
         // Create transitions
