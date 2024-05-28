@@ -1,48 +1,83 @@
-﻿using Core.Graphs;
-
-namespace Core.LexicalAnalysis;
+﻿namespace Core.LexicalAnalysis;
 
 public class Lexer
 {
-    private readonly Dictionary<int, Dictionary<char, int>> transition_table = [];
-    private readonly Dictionary<int, string> accept_states = [];
-    private readonly int start_state;
+    private Dictionary<int, Dictionary<char, int>> transition_table = [];
+    private Dictionary<int, string> accept_states = [];
+    private int start_state;
 
-    public Lexer(Node dfa)
+    public void Set(int start, Dictionary<int, Dictionary<char, int>> transition, Dictionary<int, string> accept)
     {
-        start_state = dfa.Id;
-        WalkTree(dfa);
+        start_state = start;
+        transition_table = transition;
+        accept_states = accept;
     }
 
-    private void WalkTree(Node node)
+    public void Run(string input)
     {
-        var visited = new HashSet<Node>();
-        var toVisit = new Stack<Node>();
-
-        toVisit.Push(node);
-
-        while (toVisit.Count > 0)
+        while (input.Length > 0)
         {
-            var n = toVisit.Pop();
-            if (visited.Contains(n))
-                continue;
-
-            visited.Add(n);
-
-            foreach (var t in n.Transitions)
-            {
-                var chars = t.Symbol.GetCharSet();
-                foreach (var c in chars)
-                    Addtransition(n.Id, t.To.Id, c);
-                
-                if (!visited.Contains(t.To))
-                    toVisit.Push(t.To);
-            }
+            NextToken(ref input);
         }
     }
 
-    private void Addtransition(int from, int to, char c)
+    public void NextToken(ref string input)
     {
-        Console.WriteLine($"Adding transition {from}->{to} on {c}");
+        var states = new Stack<int>();
+        var current_state = start_state;
+        var next_state = -1;
+        var accept_state = string.Empty;
+        var index = 0;
+        char c;
+
+        // Read ahead until stuck
+        while (index < input.Length)
+        {
+            c = input[index];
+            //Console.WriteLine($"Loop: current_state={current_state}, c={c}, # on stack {states.Count}");
+
+            // Find transition from current_state on symbol c
+            if (transition_table.TryGetValue(current_state, out var pair) && pair.TryGetValue(c, out next_state))
+            {
+                //Console.WriteLine($"  Found transition from {current_state} on {c} to {next_state}");
+            }
+            else
+            {
+                //Console.WriteLine($"  No transition found from {current_state} on {c}");
+                break;
+            }
+
+            // Check for final/accept states
+            if (accept_states.TryGetValue(current_state, out accept_state))
+            {
+                //Console.WriteLine($"  Found new final state {accept_state}");
+                states.Clear();
+            }
+            else
+                accept_state = string.Empty;
+
+            states.Push(current_state);
+            current_state = next_state;
+
+            index++;
+        }
+
+        // Backtrack to last final state
+        // TODO
+
+        // Output found token + rule
+        if (!accept_states.TryGetValue(current_state, out accept_state))
+            throw new InvalidDataException($"Error - no accept state found for token (c={input[index]})");
+        Console.WriteLine($"Found token {input[..index]} - rule {accept_state}");
+        input = input.Remove(0, index);
     }
+
+    //private void WriteTablesToFile()
+    //{
+    //    var str = JsonSerializer.Serialize(transition_table);
+    //    File.WriteAllText("transition_table.txt", str);
+
+    //    str = JsonSerializer.Serialize(accept_states);
+    //    File.WriteAllText("accept_states.txt", str);
+    //}
 }

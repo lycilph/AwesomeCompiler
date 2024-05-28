@@ -25,7 +25,7 @@ public class CharacterSet : IEquatable<CharacterSet>
 
     public void Add(char s, char e)
     {
-        for (char c = s; c != e; c++)
+        for (char c = s; c <= e; c++)
             Chars.Add(c);
         Label += $"{s.CharToString()}-{e.CharToString()}";
     }

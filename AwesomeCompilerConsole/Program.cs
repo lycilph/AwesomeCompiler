@@ -14,7 +14,17 @@ internal class Program
     {
         try
         {
-            Lexer();
+            var lexer_generator = new LexerGenerator();
+            lexer_generator.Add(new Regex(@"[0-9](\.[0-9]+)?"), "Number");
+            lexer_generator.Add(new Regex(@"[a-zA-Z_]([a-z_]|[A-Z]|[0-9])*"), "Identifier");
+            lexer_generator.Add(new Regex("\"[^\"]*\""), "String");
+            lexer_generator.Add(new Regex("[ \n\r\t]+"), "Whitespace");
+            lexer_generator.Add(new Regex("{"), "LeftBracket");
+            lexer_generator.Add(new Regex("}"), "RightBracket");
+
+            var lexer = lexer_generator.Generate();
+            var str = File.ReadAllText(@"TestInput\SimpleProg1.txt");
+            lexer.Run(str);
 
             Console.Write("Press any key to continue...");
             Console.ReadKey();
@@ -86,7 +96,7 @@ internal class Program
         numberRegex.Node.Accept(regexSimplifier);
         RenderDotGraph("number_regex.png", numberRegex);
 
-        var identifierRegex = new Regex("[a-z_]([a-z_]|[A-Z]|[0-9])*");
+        var identifierRegex = new Regex("[a-zA-Z_]([a-z_]|[A-Z]|[0-9])*");
         identifierRegex.Node.Accept(regexSimplifier);
         RenderDotGraph("identifier_regex.png", identifierRegex);
 
@@ -99,15 +109,19 @@ internal class Program
         RenderDotGraph("whitespace_regex.png", whitespaceRegex);
 
         var numberNFA = RegexToNFAVisitor.Accept(numberRegex);
+        numberNFA.End.First().Rule = "Number";
         RenderDotGraph("number_nfa.png", numberNFA.Start);
 
         var identifierNFA = RegexToNFAVisitor.Accept(identifierRegex);
+        identifierNFA.End.First().Rule = "Identifier";
         RenderDotGraph("identifier_nfa.png", identifierNFA.Start);
 
         var stringNFA = RegexToNFAVisitor.Accept(stringRegex);
+        stringNFA.End.First().Rule = "String";
         RenderDotGraph("string_nfa.png", stringNFA.Start);
 
         var whitespaceNFA = RegexToNFAVisitor.Accept(whitespaceRegex);
+        whitespaceNFA.End.First().Rule = "Whitespace";
         RenderDotGraph("whitespace_nfa.png", whitespaceNFA.Start);
 
         var nfa = Graph.Combine([numberNFA, identifierNFA, stringNFA, whitespaceNFA]);
@@ -118,8 +132,6 @@ internal class Program
 
         var minimized = DFAStateMinimizer.Run(dfa);
         RenderDotGraph("minimized_dfa.png", minimized);
-
-        var lexer = new Lexer(minimized);
     }
 
     private static void RenderDotGraph(string filename, Regex re)

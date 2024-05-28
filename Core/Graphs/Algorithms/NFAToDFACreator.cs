@@ -35,7 +35,10 @@ public class NFAToDFACreator
         foreach (var state in known_states.Values)
             foreach (var node in state.Nodes)
                 if (node.IsFinal)
+                {
                     state.IsFinal = true;
+                    state.Rule = node.Rule;
+                }
     }
 
     private Node ConstructStates(Node nfa)

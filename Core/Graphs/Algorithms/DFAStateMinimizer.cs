@@ -39,7 +39,8 @@ public class DFAStateMinimizer
         foreach (var set in partition)
         {
             var isFinal = set.Where(n => n.IsFinal).Any();
-            setToNodeMap[set] = new Node(isFinal);
+            var rule = isFinal ? set.First().Rule : string.Empty;
+            setToNodeMap[set] = new Node(isFinal) { Rule = rule };
         }
 
         // Create transitions
@@ -153,9 +154,16 @@ public class DFAStateMinimizer
 
     private HashSet<HashSet<Node>> InitialPartition(IEnumerable<Node> allNodes)
     {
-        var finalStates = new HashSet<Node>(allNodes.Where(n => n.IsFinal));
-        var nonFinalStates = new HashSet<Node>(allNodes.Where(n => !n.IsFinal));
+        var result = new HashSet<HashSet<Node>>();
 
-        return [nonFinalStates, finalStates];
+        var nonFinalStates = new HashSet<Node>(allNodes.Where(n => !n.IsFinal));
+        // Final states can only be combined if they shared the same rule
+        var finalStateGroups = allNodes.Where(n => n.IsFinal).GroupBy(n => n.Rule).ToList();
+
+        result.Add(nonFinalStates);
+        foreach (var group in finalStateGroups)
+            result.Add(new HashSet<Node>(group));
+
+        return result;
     }
 }

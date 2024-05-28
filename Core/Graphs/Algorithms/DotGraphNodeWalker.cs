@@ -43,8 +43,9 @@ public class DotGraphNodeWalker
 
             visited.Add(n);
 
-            var shape = n.IsFinal ? "doublecircle" : "circle";
-            sb.AppendLine($"  {n.Id} [shape={shape},label=\"{n.Id}\"]");
+            var shape = n.IsFinal ? "ellipse,peripheries=2" : "circle";
+            var rule = n.IsFinal ? $"\n({n.Rule})" : "";
+            sb.AppendLine($"  {n.Id} [shape={shape},label=\"{n.Id}{rule}\"]");
 
             foreach (var t in n.Transitions)
             {
