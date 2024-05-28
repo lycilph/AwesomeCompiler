@@ -15,6 +15,7 @@ internal class Program
         try
         {
             var lexer_generator = new LexerGenerator();
+            //lexer_generator.Add(new Regex("abc|(abc)*d"), "Test");
             lexer_generator.Add(new Regex(@"[0-9](\.[0-9]+)?"), "Number");
             lexer_generator.Add(new Regex(@"[a-zA-Z_]([a-z_]|[A-Z]|[0-9])*"), "Identifier");
             lexer_generator.Add(new Regex("\"[^\"]*\""), "String");
@@ -31,6 +32,10 @@ internal class Program
             var lexer = lexer_generator.Generate();
             var str = File.ReadAllText(@"TestInput\SimpleProg1.txt");
             lexer.Run(str);
+
+            //var lexer = lexer_generator.Generate();
+            //var str = "abcabcabcd";
+            //lexer.Run(str, verbose_output: true);
 
             Console.Write("Press any key to continue...");
             Console.ReadKey();

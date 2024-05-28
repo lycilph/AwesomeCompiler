@@ -13,16 +13,16 @@ public class Lexer
         accept_states = accept;
     }
 
-    public void Run(string input)
+    public void Run(string input, bool verbose_output = false)
     {
         while (input.Length > 0)
         {
-            NextToken(ref input);
+            NextToken(ref input, verbose_output);
         }
         Console.WriteLine("[End of input]");
     }
 
-    public void NextToken(ref string input)
+    public void NextToken(ref string input, bool verbose_output = false)
     {
         var states = new Stack<int>();
         var current_state = start_state;
@@ -31,44 +31,66 @@ public class Lexer
         var index = 0;
         char c;
 
+        if (verbose_output)
+            Console.WriteLine($"Input:{input}");
+
+        // Check if current_state is a final/accept state
+        accept_states.TryGetValue(current_state, out accept_state);
+
         // Read ahead until stuck
         while (index < input.Length)
         {
             c = input[index];
-            //Console.WriteLine($"Loop: current_state={current_state}, c={c}, # on stack {states.Count}");
+            
+
+            if (verbose_output)
+                Console.WriteLine($"Loop: current_state={current_state}, accepts={accept_state}, c={c}, Stack={string.Join(",", states)}");
 
             // Find transition from current_state on symbol c
             if (transition_table.TryGetValue(current_state, out var pair) && pair.TryGetValue(c, out next_state))
             {
-                //Console.WriteLine($"  Found transition from {current_state} on {c} to {next_state}");
+                if (verbose_output)
+                    Console.WriteLine($"  Found transition from {current_state} on {c} to {next_state}");
             }
             else
             {
-                //Console.WriteLine($"  No transition found from {current_state} on {c}");
+                if (verbose_output)
+                    Console.WriteLine($"  No transition found from {current_state} on {c}");
                 break;
             }
 
-            // Check for final/accept states
-            if (accept_states.TryGetValue(current_state, out accept_state))
+            // Handle final states
+            if (accept_state != null)
             {
-                //Console.WriteLine($"  Found new final state {accept_state}");
                 states.Clear();
+                if (verbose_output)
+                    Console.WriteLine($"  Found accept state {accept_state}, clearing stack");
             }
-            else
-                accept_state = string.Empty;
 
             states.Push(current_state);
             current_state = next_state;
-
+            accept_states.TryGetValue(current_state, out accept_state);  // Check if current_state is a final/accept state
             index++;
         }
 
+        if (accept_state == null && verbose_output)
+            Console.WriteLine("Backtracking");
+
         // Backtrack to last final state
-        // TODO
+        while (accept_state == null)
+        {
+            if (states.Count == 0)
+                throw new InvalidDataException("Could not find a match for input");
+
+            if (verbose_output)
+                Console.WriteLine($"Loop: current_state={current_state}, accepts={accept_state}, Stack={string.Join(",", states)}");
+
+            current_state = states.Pop();
+            accept_states.TryGetValue(current_state, out accept_state);
+            index--;
+        }
 
         // Output found token + rule
-        if (!accept_states.TryGetValue(current_state, out accept_state))
-            throw new InvalidDataException($"Error - no accept state found for token (c={input[index]})");
         Console.WriteLine($"Found token {input[..index]} - rule {accept_state}");
         input = input.Remove(0, index);
     }
