@@ -14,7 +14,14 @@ internal class Program
     {
         try
         {
-            FullLexerExample();
+            //var str = File.ReadAllText(@"TestInput\TestGrammar.txt");
+            //var gammar = new Grammar();
+            //var tokens = gammar.Tokenize(str, verbose_output: false);
+            //foreach (var token in tokens)
+            //    Console.WriteLine($"Found token: {token}");
+
+            Console.Write("Press any key to continue...");
+            Console.ReadKey();
         }
         catch (Exception ex)
         {

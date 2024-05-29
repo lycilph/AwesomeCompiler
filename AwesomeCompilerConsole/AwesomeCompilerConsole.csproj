@@ -12,7 +12,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="TestInput\LoxGrammar.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TestInput\SimpleProg1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestInput\TestGrammar.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
