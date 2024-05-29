@@ -1,6 +1,6 @@
 ﻿namespace Core.LexicalAnalysis;
 
-public class Lexer
+public class LexerOld
 {
     private Dictionary<int, Dictionary<char, int>> transition_table = [];
     private Dictionary<int, Tuple<string,bool>> accept_states = [];

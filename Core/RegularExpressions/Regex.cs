@@ -1,7 +1,9 @@
 ﻿using Core.RegularExpressions.Nodes;
+using System.Diagnostics;
 
 namespace Core.RegularExpressions;
 
+[DebuggerDisplay("{_pattern}")]
 public class Regex : ISimplifiable
 {
     private readonly string _pattern;

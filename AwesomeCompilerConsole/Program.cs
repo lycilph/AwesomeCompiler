@@ -14,11 +14,21 @@ internal class Program
     {
         try
         {
-            //var str = File.ReadAllText(@"TestInput\TestGrammar.txt");
-            //var gammar = new Grammar();
-            //var tokens = gammar.Tokenize(str, verbose_output: false);
-            //foreach (var token in tokens)
-            //    Console.WriteLine($"Found token: {token}");
+            var lexer_generator = new LexerGenerator<GrammarTokenType>();
+            lexer_generator.Add(new Rule<GrammarTokenType>(new Regex(@"[0-9](\.[0-9]+)?"), GrammarTokenType.Identifier));
+            
+            //    lexer_generator.Add(new Regex(@"[a-zA-Z_][a-zA-Z_0-9]*"), "Identifier");
+            //    lexer_generator.Add(new Regex("\"[^\"]*\""), "String");
+            //    lexer_generator.Add(new Regex("[ \n\r\t]+"), "Whitespace", skip: true);
+            //    lexer_generator.Add(new Regex(@"//[^\n]*\n"), "Comment", skip: true);
+            //    lexer_generator.Add(new Regex(@"\|"), "Choice");
+            //    lexer_generator.Add(new Regex(@"\*"), "Star");
+            //    lexer_generator.Add(new Regex(@"\+"), "Plus");
+            //    lexer_generator.Add(new Regex(@"\?"), "Optional");
+            //    lexer_generator.Add(new Regex(@"\("), "Left_parenthesis");
+            //    lexer_generator.Add(new Regex(@"\)"), "Right_parenthesis");
+            //    lexer_generator.Add(new Regex(":"), "Colon");
+            //    lexer_generator.Add(new Regex(";"), "Semi_colon");
 
             Console.Write("Press any key to continue...");
             Console.ReadKey();
@@ -31,32 +41,42 @@ internal class Program
         }
     }
 
-    private static void LexingWithBacktracking()
+    private static void GrammarTest()
     {
-        var lexer_generator = new LexerGenerator();
-        lexer_generator.Add(new Regex("abc|(abc)*d"), "Test");
+        //var str = File.ReadAllText(@"TestInput\TestGrammar.txt");
+        //var gammar = new Grammar();
+        //var tokens = gammar.Tokenize(str, verbose_output: false);
+        //foreach (var token in tokens)
+        //    Console.WriteLine($"Found token: {token}");
 
-        var lexer = lexer_generator.Generate();
-        var str = "abcabcabcd";
-        lexer.Run(str, verbose_output: true);
-        var tokens = lexer.Run(str);
-        foreach (var token in tokens)
-            Console.WriteLine($"Found token: {token}");
-
-        Console.Write("Press any key to continue...");
-        Console.ReadKey();
+        //Console.Write("Press any key to continue...");
+        //Console.ReadKey();
     }
 
-    private static void FullLexerExample()
+    private static void LexingWithBacktracking()
     {
-        var lexer_generator = new LexerGenerator();
+        //var lexer_generator = new LexerGenerator();
+        //lexer_generator.Add(new Regex("abc|(abc)*d"), "Test");
+
+        //var lexer = lexer_generator.Generate();
+        //var str = "abcabcabcd";
+        //lexer.Run(str, verbose_output: true);
+        //var tokens = lexer.Run(str);
+        //foreach (var token in tokens)
+        //    Console.WriteLine($"Found token: {token}");
+
+        //Console.Write("Press any key to continue...");
+        //Console.ReadKey();
+    }
+
+    private static void FullLexerExampleOld()
+    {
+        var lexer_generator = new LexerGeneratorOld();
         lexer_generator.Add(new Regex(@"[0-9](\.[0-9]+)?"), "Number");
         lexer_generator.Add(new Regex(@"[a-zA-Z_]([a-z_]|[A-Z]|[0-9])*"), "Identifier");
         lexer_generator.Add(new Regex("\"[^\"]*\""), "String");
         lexer_generator.Add(new Regex("[ \n\r\t]+"), "Whitespace", skip: true);
         lexer_generator.Add(new Regex(@"//[^\n]*\n"), "Comment", skip: true);
-        lexer_generator.Add(new Regex("{"), "LeftBracket");
-        lexer_generator.Add(new Regex("}"), "RightBracket");
         lexer_generator.Add(new Regex(@"\("), "leftParenthesis");
         lexer_generator.Add(new Regex(@"\)"), "RightParenthesis");
         lexer_generator.Add(new Regex(";"), "LineTerminator");
