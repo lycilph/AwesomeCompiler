@@ -17,7 +17,45 @@ public class LexerGenerator<T>
 
     public void Generate()
     {
+        Directory.CreateDirectory("Output");
 
+        GenerateGraphs();
+    }
+
+    private void GenerateGraphs()
+    {
+        var nfas = ConvertRulesToNFAs();
+
+        var combined_nfa = Graph.Combine(nfas);
+        RenderDotGraph(@"Output\combined_nfa.png", combined_nfa.Start);
+
+        var dfa = NFAToDFACreator.Run(combined_nfa.Start);
+        RenderDotGraph(@"Output\dfa.png", dfa);
+
+        var minimized_dfa = DFAStateMinimizer.Run(dfa);
+        RenderDotGraph(@"Output\minimized_dfa.png", minimized_dfa);
+    }
+
+    private IEnumerable<Graph> ConvertRulesToNFAs()
+    {
+        var result = new List<Graph>();
+
+        var simplifier = new SimplifyVisitor();
+        var nfa_visitor = new RegexToNFAVisitor();
+        foreach (var rule in rules)
+        {
+            rule.Regex.Node.Accept(simplifier);
+            RenderDotGraph(@"Output\" + rule.Type!.ToString() + "_regex.png", rule.Regex);
+
+            var nfa = rule.Regex.Node.Accept(nfa_visitor);
+            nfa.End.First().Rule = rule;
+            nfa.End.First().Skip = skip;
+            RenderDotGraph(@"Output\" + rule + "_nfa.png", nfa.Start);
+
+            result.Add(nfa);
+        }
+
+        return result;
     }
 
     private static void RenderDotGraph(string filename, Node n)

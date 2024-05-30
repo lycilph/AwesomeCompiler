@@ -15,20 +15,19 @@ internal class Program
         try
         {
             var lexer_generator = new LexerGenerator<GrammarTokenType>();
-            lexer_generator.Add(new Rule<GrammarTokenType>(new Regex(@"[0-9](\.[0-9]+)?"), GrammarTokenType.Identifier));
-            
-            //    lexer_generator.Add(new Regex(@"[a-zA-Z_][a-zA-Z_0-9]*"), "Identifier");
-            //    lexer_generator.Add(new Regex("\"[^\"]*\""), "String");
-            //    lexer_generator.Add(new Regex("[ \n\r\t]+"), "Whitespace", skip: true);
-            //    lexer_generator.Add(new Regex(@"//[^\n]*\n"), "Comment", skip: true);
-            //    lexer_generator.Add(new Regex(@"\|"), "Choice");
-            //    lexer_generator.Add(new Regex(@"\*"), "Star");
-            //    lexer_generator.Add(new Regex(@"\+"), "Plus");
-            //    lexer_generator.Add(new Regex(@"\?"), "Optional");
-            //    lexer_generator.Add(new Regex(@"\("), "Left_parenthesis");
-            //    lexer_generator.Add(new Regex(@"\)"), "Right_parenthesis");
-            //    lexer_generator.Add(new Regex(":"), "Colon");
-            //    lexer_generator.Add(new Regex(";"), "Semi_colon");
+            lexer_generator.Add(new Rule<GrammarTokenType>(new Regex("[a-zA-Z_][a-zA-Z_0-9]*"), GrammarTokenType.Identifier));
+            lexer_generator.Add(new Rule<GrammarTokenType>(new Regex("\"[^\"]*\""), GrammarTokenType.String));
+            lexer_generator.Add(new Rule<GrammarTokenType>(new Regex("[ \n\r\t]+"), GrammarTokenType.Whitespace, true));
+            lexer_generator.Add(new Rule<GrammarTokenType>(new Regex("//[^\n]*\n"), GrammarTokenType.Comment, true));
+            lexer_generator.Add(new Rule<GrammarTokenType>(new Regex(@"\|"), GrammarTokenType.Alternation));
+            lexer_generator.Add(new Rule<GrammarTokenType>(new Regex(@"\*"), GrammarTokenType.Star));
+            lexer_generator.Add(new Rule<GrammarTokenType>(new Regex(@"\+"), GrammarTokenType.Plus));
+            lexer_generator.Add(new Rule<GrammarTokenType>(new Regex(@"\?"), GrammarTokenType.Optional));
+            lexer_generator.Add(new Rule<GrammarTokenType>(new Regex(@"\("), GrammarTokenType.leftParenthesis));
+            lexer_generator.Add(new Rule<GrammarTokenType>(new Regex(@"\)"), GrammarTokenType.RightParenthesis));
+            lexer_generator.Add(new Rule<GrammarTokenType>(new Regex(@"\:"), GrammarTokenType.Colon));
+            lexer_generator.Add(new Rule<GrammarTokenType>(new Regex(@"\;"), GrammarTokenType.SemiColon));
+            lexer_generator.Generate();
 
             Console.Write("Press any key to continue...");
             Console.ReadKey();
