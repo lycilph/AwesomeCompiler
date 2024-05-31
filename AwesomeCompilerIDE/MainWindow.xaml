@@ -17,11 +17,25 @@
         </Grid.ColumnDefinitions>
 
         <DockPanel Grid.Column="0">
-            <TextBox x:Name="regex_textbox"
-                     DockPanel.Dock="Top"
-                     KeyDown="RegexTextKeyDown">
-                (a|b)*abb
-            </TextBox>
+            <ComboBox x:Name="examples_combobox"
+                      DockPanel.Dock="Top"
+                      SelectedIndex="0"
+                      SelectionChanged="ComboBoxSelectionChanged">
+                <ComboBoxItem>Clear</ComboBoxItem>
+                <ComboBoxItem>(a|b)*.+c?</ComboBoxItem>
+                <ComboBoxItem>[a-z]([a-z]|[0-9])*</ComboBoxItem>
+            </ComboBox>
+            
+            <DockPanel DockPanel.Dock="Top">
+                <Button DockPanel.Dock="Right"
+                        Padding="3"
+                        Click="Button_Click">></Button>
+                <TextBox x:Name="regex_textbox"
+                         KeyDown="RegexTextKeyDown">
+                    [0-9]
+                </TextBox>
+            </DockPanel>
+
             <ListBox x:Name="tokens_listbox"
                      Margin="0 10 0 0"/>
         </DockPanel>
