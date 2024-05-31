@@ -1,5 +1,4 @@
 ﻿using AwesomeCompilerCore.RegularExpressions;
-using AwesomeCompilerCore.RegularExpressions.Nodes;
 
 namespace AwesomeCompilerSandbox;
 
@@ -9,13 +8,11 @@ internal class Program
     {
         try
         {
-            var str = "a?|b+(c*.)[^0-9]";
-            var regex1 = new Regex(str);
+            var str = "abd*";
+            var input = "abdddd";
+            var regex = new Regex(str);
 
-            RegexNode.ResetIdCounter();
-            var regex2 = new Regex(str);
-
-            Console.WriteLine($"regex1 = regex2 => {regex1 == regex2}, (hashes {regex1.GetHashCode()}, {regex2.GetHashCode()})");
+            Console.WriteLine($"{str} match {input} = {regex.Match(input)}");
         }
         catch (Exception e)
         {

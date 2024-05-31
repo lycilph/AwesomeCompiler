@@ -11,6 +11,16 @@ public class CharacterRegexNode(char value) : RegexNode, IEquatable<CharacterReg
 
     public override string ToString() => Value.CharToString();
 
+    public override bool Match(List<char> input)
+    {
+        if (input.Count > 0 && input.First() == Value)
+        {
+            input.RemoveAt(0);
+            return true;
+        }
+        return false;
+    }
+
     #region Visitors
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);

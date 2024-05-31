@@ -14,6 +14,16 @@ public class StarRegexNode : RegexNode, IEquatable<StarRegexNode>
         Child.Parent = this;
     }
 
+    public override bool Match(List<char> input)
+    {
+        while (true)
+        {
+            if (!Child.Match(input))
+                break;
+        }
+        return true;
+    }
+
     #region Visitors
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);

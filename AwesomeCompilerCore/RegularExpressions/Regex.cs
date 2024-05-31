@@ -29,6 +29,13 @@ public class Regex : RegexNode, IEquatable<Regex>
         Root = root;
     }
 
+    public bool Match(string input) => Match(input.ToList());
+
+    public override bool Match(List<char> input)
+    {
+        return Root.Match(input);
+    }
+
     #region Visitors
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);

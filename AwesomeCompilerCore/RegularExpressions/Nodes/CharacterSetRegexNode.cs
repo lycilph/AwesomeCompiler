@@ -1,4 +1,5 @@
-﻿using AwesomeCompilerCore.RegularExpressions.Visitors;
+﻿using AwesomeCompilerCore.Common;
+using AwesomeCompilerCore.RegularExpressions.Visitors;
 
 namespace AwesomeCompilerCore.RegularExpressions.Nodes;
 
@@ -24,12 +25,44 @@ public class CharacterSetRegexNode : RegexNode, IEquatable<CharacterSetRegexNode
     public void Add(CharacterSetElement element) => Elements.Add(element);
     public void Add(char c) => Add(new SingleCharacterSetElement(c));
     public void Add(char s, char e) => Add(new RangeCharacterSetElement(s, e));
-    
+
+    public CharSet GetCharSet()
+    {
+        var set = new CharSet() { IsNegative = IsNegative };
+
+        foreach (var element in Elements)
+        {
+            switch (element)
+            {
+                case SingleCharacterSetElement s:
+                    set.Add(s.Value);
+                    break;
+                case RangeCharacterSetElement r:
+                    set.Add(r.Start, r.End);
+                    break;
+                default:
+                    throw new InvalidOperationException();
+            };
+        }
+
+        return set;
+    }
+
     public override string ToString()
     {
         var negate = IsNegative ? "^" : "";
         var elements = string.Join("", Elements.Select(e => e.ToString()));
         return negate + elements;
+    }
+
+    public override bool Match(List<char> input)
+    {
+        if (input.Count > 0 && GetCharSet().Get().Contains(input[0]))
+        { 
+            input.RemoveAt(0);
+            return true;
+        }
+        return false;
     }
 
     #region Visitors

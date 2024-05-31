@@ -18,6 +18,11 @@ public class ConcatenationRegexNode : RegexNode, IEquatable<ConcatenationRegexNo
         Right.Parent = this;
     }
 
+    public override bool Match(List<char> input)
+    {
+        return Left.Match(input) && Right.Match(input);
+    }
+
     #region Visitors
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);

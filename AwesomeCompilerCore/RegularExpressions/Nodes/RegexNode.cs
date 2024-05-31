@@ -9,6 +9,8 @@ public abstract class RegexNode
     public int Id { get; } = id_counter++;
     public RegexNode? Parent { get; set; }
 
+    public abstract bool Match(List<char> input);
+
     public abstract void Accept(IVisitor visitor);
     public abstract R Accept<R>(IVisitor<R> visitor);
 

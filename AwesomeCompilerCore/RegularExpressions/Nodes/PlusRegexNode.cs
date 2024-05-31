@@ -14,6 +14,19 @@ public class PlusRegexNode : RegexNode, IEquatable<PlusRegexNode>
         Child.Parent = this;
     }
 
+    public override bool Match(List<char> input)
+    {
+        var result = false;
+        while (true)
+        {
+            if (Child.Match(input))
+                result = true;
+            else
+                break;
+        }
+        return result;
+    }
+
     #region Visitors
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);

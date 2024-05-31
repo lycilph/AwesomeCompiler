@@ -14,6 +14,12 @@ public class OptionalRegexNode : RegexNode, IEquatable<OptionalRegexNode>
         Child.Parent = this;
     }
 
+    public override bool Match(List<char> input)
+    {
+        Child.Match(input);
+        return true;
+    }
+
     #region Visitors
     public override void Accept(IVisitor visitor) => visitor.Visit(this);
     public override R Accept<R>(IVisitor<R> visitor) => visitor.Visit(this);
