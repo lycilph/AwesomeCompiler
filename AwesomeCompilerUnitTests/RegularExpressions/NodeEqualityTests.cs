@@ -2,9 +2,9 @@
 using AwesomeCompilerCore.RegularExpressions.Misc;
 using AwesomeCompilerCore.RegularExpressions.Nodes;
 
-namespace AwesomeCompilerUnitTests;
+namespace AwesomeCompilerUnitTests.RegularExpressions;
 
-public class RegexNodeEqualityTests
+public class NodeEqualityTests
 {
     [Fact]
     public void RegexEqualityTest()

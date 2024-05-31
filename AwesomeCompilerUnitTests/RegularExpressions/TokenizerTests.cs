@@ -1,8 +1,8 @@
 using AwesomeCompilerCore.RegularExpressions;
 
-namespace AwesomeCompilerUnitTests;
+namespace AwesomeCompilerUnitTests.RegularExpressions;
 
-public class RegexTokenizerTests
+public class TokenizerTests
 {
     [Fact]
     public void RecognizeAllTokens()

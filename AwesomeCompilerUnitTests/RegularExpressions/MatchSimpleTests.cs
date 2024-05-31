@@ -1,8 +1,8 @@
 ﻿using AwesomeCompilerCore.RegularExpressions;
 
-namespace AwesomeCompilerUnitTests;
+namespace AwesomeCompilerUnitTests.RegularExpressions;
 
-public class RegexMatchTests
+public class MatchSimpleTests
 {
     [Fact]
     public void MatchSimpleInput1()
