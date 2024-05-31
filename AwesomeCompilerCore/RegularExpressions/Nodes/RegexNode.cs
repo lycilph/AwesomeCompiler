@@ -11,4 +11,6 @@ public abstract class RegexNode
 
     public abstract void Accept(IVisitor visitor);
     public abstract R Accept<R>(IVisitor<R> visitor);
+
+    public static void ResetIdCounter() => id_counter = 0;
 }
