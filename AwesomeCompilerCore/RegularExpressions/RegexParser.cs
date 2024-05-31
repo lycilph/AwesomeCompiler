@@ -28,7 +28,7 @@ public class RegexParser
     {
         var node = ParseAlternation();
         Match(RegexTokenType.EndOfInput);
-        return new Regex("",node);
+        return node;
     }
     
     private RegexNode ParseAlternation()

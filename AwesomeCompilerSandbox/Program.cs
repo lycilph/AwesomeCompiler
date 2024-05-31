@@ -9,12 +9,10 @@ internal class Program
     {
         try
         {
-            var str = "a?|b+(c*.)[0-9]";
-            var tokens = RegexTokenizer.Tokenize(str);
-            var node = RegexParser.Parse(tokens);
-            ((Regex)node).Pattern = str;
+            var str = "a?|b+(c*.)[^0-9]";
+            var regex = new Regex(str);
 
-            Console.WriteLine(PrintVisitor.Run(node));
+            Console.WriteLine(PrintVisitor.Run(regex));
         }
         catch (Exception e)
         {
