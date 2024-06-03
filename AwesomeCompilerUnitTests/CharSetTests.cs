@@ -26,7 +26,7 @@ public class CharSetTests
         // Act
 
         // Assert
-        Assert.Equal(128, cs.Get().Count);
+        Assert.Equal(128, cs.ToHashSet().Count);
     }
 
     [Fact]
@@ -36,7 +36,7 @@ public class CharSetTests
         var cs = new CharSet('a', 'z') { IsNegative = true };
 
         // Act
-        var set = cs.Get();
+        var set = cs.ToHashSet();
 
         // Assert
         Assert.Equal(102, set.Count);

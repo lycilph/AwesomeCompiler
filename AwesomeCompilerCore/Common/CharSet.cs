@@ -29,7 +29,7 @@ public class CharSet : IEquatable<CharSet>
         Label += $"{s.CharToString()}-{e.CharToString()}";
     }
 
-    public HashSet<char> Get()
+    public HashSet<char> ToHashSet()
     {
         if (IsNegative)
         {

@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Graphs\DFAAlgorithms\" />
     <Folder Include="LexicalAnalysis\" />
-    <Folder Include="Graphs\" />
   </ItemGroup>
 
 </Project>

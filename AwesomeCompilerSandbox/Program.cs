@@ -1,4 +1,5 @@
-﻿using AwesomeCompilerCore.RegularExpressions;
+﻿using AwesomeCompilerCore.Graphs.NFAAlgorithms;
+using AwesomeCompilerCore.RegularExpressions;
 
 namespace AwesomeCompilerSandbox;
 
@@ -8,11 +9,8 @@ internal class Program
     {
         try
         {
-            var str = "abd*";
-            var input = "abdddd";
-            var regex = new Regex(str);
-
-            Console.WriteLine($"{str} match {input} = {regex.Match(input)}");
+            var regex = new Regex("(a|b)*.+c?");
+            var nfa = RegexToNFAVisitor.Run(regex);
         }
         catch (Exception e)
         {

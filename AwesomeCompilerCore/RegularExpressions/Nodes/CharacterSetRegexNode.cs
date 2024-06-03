@@ -57,7 +57,7 @@ public class CharacterSetRegexNode : RegexNode, IEquatable<CharacterSetRegexNode
 
     public override bool Match(List<char> input)
     {
-        if (input.Count > 0 && GetCharSet().Get().Contains(input[0]))
+        if (input.Count > 0 && GetCharSet().ToHashSet().Contains(input[0]))
         { 
             input.RemoveAt(0);
             return true;
