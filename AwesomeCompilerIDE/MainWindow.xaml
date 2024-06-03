@@ -26,9 +26,11 @@
                 <ComboBoxItem>[a-z]([a-z]|[0-9])*</ComboBoxItem>
             </ComboBox>
             
-            <DockPanel DockPanel.Dock="Top">
+            <DockPanel DockPanel.Dock="Top"
+                       Margin="0 10 0 0">
                 <Button DockPanel.Dock="Right"
-                        Padding="3"
+                        Padding="6 3"
+                        Margin="5 0 0 0"
                         Click="Button_Click">></Button>
                 <TextBox x:Name="regex_textbox"
                          KeyDown="RegexTextKeyDown">
@@ -36,8 +38,12 @@
                 </TextBox>
             </DockPanel>
 
+            <TextBlock DockPanel.Dock="Top"
+                       Margin="0 10 0 0"
+                       Text="Tokens"/>
+
             <ListBox x:Name="tokens_listbox"
-                     Margin="0 10 0 0"/>
+                     Margin="0 5 0 0"/>
         </DockPanel>
 
         <GridSplitter Grid.Column="1"
